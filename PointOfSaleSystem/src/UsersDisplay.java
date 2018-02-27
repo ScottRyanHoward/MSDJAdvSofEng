@@ -8,13 +8,13 @@
  *
  * @author Matt HP
  */
-public class UsersDisplay extends javax.swing.JFrame
+public class InventoryDisplay extends javax.swing.JFrame
 {
 
     /**
      * Creates new form NewJFrame
      */
-    public UsersDisplay()
+    public InventoryDisplay()
     {
         initComponents();
     }
