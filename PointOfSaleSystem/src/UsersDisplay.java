@@ -54,6 +54,9 @@ public class UsersDisplay extends javax.swing.JFrame
         modify_user_jbutton = new javax.swing.JButton();
         hours_jlabel = new javax.swing.JLabel();
         hours_textfield = new javax.swing.JTextField();
+        password_jlabel = new javax.swing.JLabel();
+        password_textfield = new javax.swing.JTextField();
+        jCheckBox1 = new javax.swing.JCheckBox();
         search_jpanel = new javax.swing.JPanel();
         first_name_jradiobutton = new javax.swing.JRadioButton();
         last_name_jradiobutton = new javax.swing.JRadioButton();
@@ -189,56 +192,51 @@ public class UsersDisplay extends javax.swing.JFrame
 
         hours_jlabel.setText("Hours :");
 
+        password_jlabel.setText("Password");
+
+        jCheckBox1.setText("Administrator");
+
         javax.swing.GroupLayout user_jpanelLayout = new javax.swing.GroupLayout(user_jpanel);
         user_jpanel.setLayout(user_jpanelLayout);
         user_jpanelLayout.setHorizontalGroup(
             user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, user_jpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(address_jlabel)
+                    .addComponent(last_name_jlabel)
+                    .addComponent(ssn_jlabel)
+                    .addComponent(wage_jlabel)
+                    .addComponent(hours_jlabel)
+                    .addComponent(password_jlabel)
+                    .addComponent(first_name_jlabel)
+                    .addComponent(employee_id_jlabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(last_name_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(first_name_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(address_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(ssn_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(wage_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hours_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(employee_id_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(129, 129, 129))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, user_jpanelLayout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(icon_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(150, Short.MAX_VALUE))
             .addGroup(user_jpanelLayout.createSequentialGroup()
-                .addGap(5, 5, 5)
+                .addGap(19, 19, 19)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(user_jpanelLayout.createSequentialGroup()
-                        .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, user_jpanelLayout.createSequentialGroup()
-                                .addComponent(last_name_jlabel)
-                                .addGap(18, 18, 18)
-                                .addComponent(last_name_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, user_jpanelLayout.createSequentialGroup()
-                                .addComponent(employee_id_jlabel)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(employee_id_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, user_jpanelLayout.createSequentialGroup()
-                                .addComponent(ssn_jlabel)
-                                .addGap(54, 54, 54)
-                                .addComponent(ssn_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, user_jpanelLayout.createSequentialGroup()
-                                .addComponent(address_jlabel)
-                                .addGap(32, 32, 32)
-                                .addComponent(address_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, user_jpanelLayout.createSequentialGroup()
-                                .addComponent(first_name_jlabel)
-                                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(user_jpanelLayout.createSequentialGroup()
-                                        .addGap(56, 56, 56)
-                                        .addComponent(icon_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(user_jpanelLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(first_name_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, user_jpanelLayout.createSequentialGroup()
-                                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(wage_jlabel)
-                                    .addComponent(hours_jlabel))
-                                .addGap(45, 45, 45)
-                                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(wage_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(hours_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(135, 135, 135))
+                    .addComponent(jCheckBox1)
                     .addGroup(user_jpanelLayout.createSequentialGroup()
                         .addComponent(add_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(delete_user_jbutton)
-                        .addGap(18, 18, 18))))
+                        .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(18, 18, 18)
+                .addComponent(delete_user_jbutton)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         user_jpanelLayout.setVerticalGroup(
             user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,7 +245,7 @@ public class UsersDisplay extends javax.swing.JFrame
                 .addComponent(icon_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(employee_id_jlabel, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(employee_id_jlabel)
                     .addComponent(employee_id_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -262,24 +260,29 @@ public class UsersDisplay extends javax.swing.JFrame
                     .addComponent(address_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(address_jlabel))
                 .addGap(15, 15, 15)
-                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(user_jpanelLayout.createSequentialGroup()
-                        .addComponent(ssn_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(wage_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(wage_jlabel)))
+                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(ssn_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(ssn_jlabel))
+                .addGap(18, 18, 18)
+                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(wage_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(wage_jlabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(hours_jlabel)
-                    .addComponent(hours_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                    .addComponent(hours_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(hours_jlabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(password_jlabel)
+                    .addComponent(password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addComponent(jCheckBox1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(delete_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(add_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(22, 22, 22))
+                .addGap(26, 26, 26))
         );
 
         option_jtabbedpane.addTab("User", null, user_jpanel, "");
@@ -336,7 +339,7 @@ public class UsersDisplay extends javax.swing.JFrame
                 .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(search_jpanelLayout.createSequentialGroup()
                         .addComponent(first_name_jradiobutton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
                         .addComponent(search_first_name_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(search_jpanelLayout.createSequentialGroup()
                         .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -346,7 +349,7 @@ public class UsersDisplay extends javax.swing.JFrame
                         .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(search_employee_id_jtextfield, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
                             .addComponent(search_last_name_jtextfield))))
-                .addContainerGap(126, Short.MAX_VALUE))
+                .addContainerGap(133, Short.MAX_VALUE))
             .addGroup(search_jpanelLayout.createSequentialGroup()
                 .addGap(136, 136, 136)
                 .addComponent(search_jbutton)
@@ -369,7 +372,7 @@ public class UsersDisplay extends javax.swing.JFrame
                     .addComponent(employee_id_jradiobutton))
                 .addGap(39, 39, 39)
                 .addComponent(search_jbutton)
-                .addContainerGap(273, Short.MAX_VALUE))
+                .addContainerGap(365, Short.MAX_VALUE))
         );
 
         option_jtabbedpane.addTab("Search", null, search_jpanel, "");
@@ -473,7 +476,7 @@ public class UsersDisplay extends javax.swing.JFrame
         );
         product_table_jpanelLayout.setVerticalGroup(
             product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -494,8 +497,8 @@ public class UsersDisplay extends javax.swing.JFrame
                 .addContainerGap()
                 .addComponent(logo_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(option_jtabbedpane)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(option_jtabbedpane, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(button_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addComponent(product_table_jpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -623,6 +626,7 @@ public class UsersDisplay extends javax.swing.JFrame
     private javax.swing.JTextField hours_textfield;
     private javax.swing.JLabel icon_jLabel;
     private javax.swing.JPanel icon_jpanel;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel last_name_jlabel;
     private javax.swing.JRadioButton last_name_jradiobutton;
@@ -633,6 +637,8 @@ public class UsersDisplay extends javax.swing.JFrame
     private javax.swing.JButton menu_jbutton;
     private javax.swing.JButton modify_user_jbutton;
     private javax.swing.JTabbedPane option_jtabbedpane;
+    private javax.swing.JLabel password_jlabel;
+    private javax.swing.JTextField password_textfield;
     private javax.swing.JTable product_jtable;
     private javax.swing.JPanel product_table_jpanel;
     private javax.swing.JTextField search_employee_id_jtextfield;
