@@ -56,7 +56,7 @@ public class UsersDisplay extends javax.swing.JFrame
         hours_textfield = new javax.swing.JTextField();
         password_jlabel = new javax.swing.JLabel();
         password_textfield = new javax.swing.JTextField();
-        jCheckBox1 = new javax.swing.JCheckBox();
+        admin_checkbox = new javax.swing.JCheckBox();
         search_jpanel = new javax.swing.JPanel();
         first_name_jradiobutton = new javax.swing.JRadioButton();
         last_name_jradiobutton = new javax.swing.JRadioButton();
@@ -194,7 +194,7 @@ public class UsersDisplay extends javax.swing.JFrame
 
         password_jlabel.setText("Password");
 
-        jCheckBox1.setText("Administrator");
+        admin_checkbox.setText("Administrator");
 
         javax.swing.GroupLayout user_jpanelLayout = new javax.swing.GroupLayout(user_jpanel);
         user_jpanel.setLayout(user_jpanelLayout);
@@ -229,7 +229,7 @@ public class UsersDisplay extends javax.swing.JFrame
             .addGroup(user_jpanelLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jCheckBox1)
+                    .addComponent(admin_checkbox)
                     .addGroup(user_jpanelLayout.createSequentialGroup()
                         .addComponent(add_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -276,7 +276,7 @@ public class UsersDisplay extends javax.swing.JFrame
                     .addComponent(password_jlabel)
                     .addComponent(password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
-                .addComponent(jCheckBox1)
+                .addComponent(admin_checkbox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(delete_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -613,6 +613,7 @@ public class UsersDisplay extends javax.swing.JFrame
     private javax.swing.JButton add_user_jbutton;
     private javax.swing.JLabel address_jlabel;
     private javax.swing.JTextField address_textfield;
+    private javax.swing.JCheckBox admin_checkbox;
     private javax.swing.JPanel button_panel;
     private javax.swing.JLabel company_name_label;
     private javax.swing.JButton delete_user_jbutton;
@@ -626,7 +627,6 @@ public class UsersDisplay extends javax.swing.JFrame
     private javax.swing.JTextField hours_textfield;
     private javax.swing.JLabel icon_jLabel;
     private javax.swing.JPanel icon_jpanel;
-    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel last_name_jlabel;
     private javax.swing.JRadioButton last_name_jradiobutton;
