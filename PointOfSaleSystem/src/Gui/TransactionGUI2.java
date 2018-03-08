@@ -1,3 +1,5 @@
+package Gui;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -26,7 +28,8 @@ public class TransactionGUI2 extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         search_panel_button_group = new javax.swing.ButtonGroup();
         logo_jpanel = new javax.swing.JPanel();
@@ -134,8 +137,10 @@ public class TransactionGUI2 extends javax.swing.JFrame
         button_panel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         transaction_jbutton.setText("Inventory");
-        transaction_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        transaction_jbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 transaction_jbuttonActionPerformed(evt);
             }
         });
@@ -143,8 +148,10 @@ public class TransactionGUI2 extends javax.swing.JFrame
         admin_jbutton.setText("Admin");
 
         menu_jbutton.setText("Menu");
-        menu_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        menu_jbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 menu_jbuttonActionPerformed(evt);
             }
         });
@@ -179,16 +186,20 @@ public class TransactionGUI2 extends javax.swing.JFrame
         button_panel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         transaction_jbutton1.setText("Enter Code");
-        transaction_jbutton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        transaction_jbutton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 transaction_jbutton1ActionPerformed(evt);
             }
         });
 
         menu_jbutton1.setBackground(new java.awt.Color(255, 0, 51));
         menu_jbutton1.setText("Enter Coupon");
-        menu_jbutton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        menu_jbutton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 menu_jbutton1ActionPerformed(evt);
             }
         });
@@ -391,7 +402,7 @@ public class TransactionGUI2 extends javax.swing.JFrame
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(button_panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(button_panel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .addComponent(button_panel1, javax.swing.GroupLayout.DEFAULT_SIZE, 161, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -445,32 +456,40 @@ public class TransactionGUI2 extends javax.swing.JFrame
 
         product_name_jbutton.setText("Product Name: ");
 
-        product_name_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        product_name_textfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 product_name_textfieldActionPerformed(evt);
             }
         });
 
         quantity_jlabel.setText("Qty :");
 
-        quantity_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        quantity_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 quantity_jtextfieldActionPerformed(evt);
             }
         });
 
         price_jlabel.setText("Price :");
 
-        price_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        price_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 price_jtextfieldActionPerformed(evt);
             }
         });
 
         category_jlabel.setText("Category :");
 
-        category_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        category_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 category_jtextfieldActionPerformed(evt);
             }
         });

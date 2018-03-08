@@ -1,3 +1,5 @@
+package Gui;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -26,7 +28,8 @@ public class UsersDisplay extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         search_panel_button_group = new javax.swing.ButtonGroup();
         logo_jpanel = new javax.swing.JPanel();
@@ -148,8 +151,10 @@ public class UsersDisplay extends javax.swing.JFrame
 
         first_name_jlabel.setText("First Name : ");
 
-        first_name_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        first_name_textfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 first_name_textfieldActionPerformed(evt);
             }
         });
@@ -158,16 +163,20 @@ public class UsersDisplay extends javax.swing.JFrame
 
         ssn_jlabel.setText("SSN :");
 
-        ssn_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ssn_textfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ssn_textfieldActionPerformed(evt);
             }
         });
 
         wage_jlabel.setText("Wage :");
 
-        wage_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        wage_textfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 wage_textfieldActionPerformed(evt);
             }
         });
@@ -175,15 +184,19 @@ public class UsersDisplay extends javax.swing.JFrame
         last_name_jlabel.setText("Last Name :");
 
         add_user_jbutton.setText("Add User");
-        add_user_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        add_user_jbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 add_user_jbuttonActionPerformed(evt);
             }
         });
 
         delete_user_jbutton.setText("Delete User");
-        delete_user_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        delete_user_jbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 delete_user_jbuttonActionPerformed(evt);
             }
         });
@@ -289,43 +302,55 @@ public class UsersDisplay extends javax.swing.JFrame
 
         search_panel_button_group.add(first_name_jradiobutton);
         first_name_jradiobutton.setText("First Name :");
-        first_name_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        first_name_jradiobutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 first_name_jradiobuttonActionPerformed(evt);
             }
         });
 
         search_panel_button_group.add(last_name_jradiobutton);
         last_name_jradiobutton.setText("Last Name :");
-        last_name_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        last_name_jradiobutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 last_name_jradiobuttonActionPerformed(evt);
             }
         });
 
         search_panel_button_group.add(employee_id_jradiobutton);
         employee_id_jradiobutton.setText("Employee ID :");
-        employee_id_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        employee_id_jradiobutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 employee_id_jradiobuttonActionPerformed(evt);
             }
         });
 
-        search_last_name_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        search_last_name_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 search_last_name_jtextfieldActionPerformed(evt);
             }
         });
 
-        search_employee_id_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        search_employee_id_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 search_employee_id_jtextfieldActionPerformed(evt);
             }
         });
 
         search_jbutton.setText("Search");
-        search_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        search_jbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 search_jbuttonActionPerformed(evt);
             }
         });
@@ -380,8 +405,10 @@ public class UsersDisplay extends javax.swing.JFrame
         button_panel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         menu_jbutton.setText("Menu");
-        menu_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        menu_jbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 menu_jbuttonActionPerformed(evt);
             }
         });
@@ -406,7 +433,8 @@ public class UsersDisplay extends javax.swing.JFrame
         product_table_jpanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         product_jtable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -458,7 +486,8 @@ public class UsersDisplay extends javax.swing.JFrame
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "Id", "First Name", "Last Name", "Address", "SSN", "Wage", "Hours"
             }
         ));
