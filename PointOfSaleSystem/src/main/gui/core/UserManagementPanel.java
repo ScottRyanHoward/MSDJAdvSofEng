@@ -1,23 +1,22 @@
-package Gui;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package main.gui.core;
+
+import java.awt.CardLayout;
 
 /**
  *
- * @author John Centritto
+ * @author Dakota
  */
-public class UsersDisplay extends javax.swing.JFrame
-{
+public class UserManagementPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form NewJFrame
+     * Creates new form UserManagementPanel
      */
-    public UsersDisplay()
-    {
+    public UserManagementPanel() {
         initComponents();
     }
 
@@ -28,10 +27,8 @@ public class UsersDisplay extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
-        search_panel_button_group = new javax.swing.ButtonGroup();
         logo_jpanel = new javax.swing.JPanel();
         loco_icon_panel = new javax.swing.JPanel();
         logo_jlabel = new javax.swing.JLabel();
@@ -71,11 +68,10 @@ public class UsersDisplay extends javax.swing.JFrame
         button_panel = new javax.swing.JPanel();
         menu_jbutton = new javax.swing.JButton();
         product_table_jpanel = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        product_jtable = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("USERS");
+        setPreferredSize(new java.awt.Dimension(1878, 1038));
 
         logo_jpanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -90,14 +86,14 @@ public class UsersDisplay extends javax.swing.JFrame
             .addGroup(loco_icon_panelLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(logo_jlabel)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         loco_icon_panelLayout.setVerticalGroup(
             loco_icon_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loco_icon_panelLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(logo_jlabel)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         company_name_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -135,7 +131,7 @@ public class UsersDisplay extends javax.swing.JFrame
         icon_jpanelLayout.setHorizontalGroup(
             icon_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, icon_jpanelLayout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(icon_jLabel)
                 .addGap(32, 32, 32))
         );
@@ -144,17 +140,15 @@ public class UsersDisplay extends javax.swing.JFrame
             .addGroup(icon_jpanelLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(icon_jLabel)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         employee_id_jlabel.setText("Employee ID :");
 
         first_name_jlabel.setText("First Name : ");
 
-        first_name_textfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        first_name_textfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 first_name_textfieldActionPerformed(evt);
             }
         });
@@ -163,20 +157,16 @@ public class UsersDisplay extends javax.swing.JFrame
 
         ssn_jlabel.setText("SSN :");
 
-        ssn_textfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        ssn_textfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ssn_textfieldActionPerformed(evt);
             }
         });
 
         wage_jlabel.setText("Wage :");
 
-        wage_textfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        wage_textfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 wage_textfieldActionPerformed(evt);
             }
         });
@@ -184,19 +174,15 @@ public class UsersDisplay extends javax.swing.JFrame
         last_name_jlabel.setText("Last Name :");
 
         add_user_jbutton.setText("Add User");
-        add_user_jbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        add_user_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 add_user_jbuttonActionPerformed(evt);
             }
         });
 
         delete_user_jbutton.setText("Delete User");
-        delete_user_jbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        delete_user_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delete_user_jbuttonActionPerformed(evt);
             }
         });
@@ -238,7 +224,7 @@ public class UsersDisplay extends javax.swing.JFrame
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, user_jpanelLayout.createSequentialGroup()
                 .addGap(136, 136, 136)
                 .addComponent(icon_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(150, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(user_jpanelLayout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -290,7 +276,7 @@ public class UsersDisplay extends javax.swing.JFrame
                     .addComponent(password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addComponent(admin_checkbox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(delete_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -300,57 +286,42 @@ public class UsersDisplay extends javax.swing.JFrame
 
         option_jtabbedpane.addTab("User", null, user_jpanel, "");
 
-        search_panel_button_group.add(first_name_jradiobutton);
         first_name_jradiobutton.setText("First Name :");
-        first_name_jradiobutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        first_name_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 first_name_jradiobuttonActionPerformed(evt);
             }
         });
 
-        search_panel_button_group.add(last_name_jradiobutton);
         last_name_jradiobutton.setText("Last Name :");
-        last_name_jradiobutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        last_name_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 last_name_jradiobuttonActionPerformed(evt);
             }
         });
 
-        search_panel_button_group.add(employee_id_jradiobutton);
         employee_id_jradiobutton.setText("Employee ID :");
-        employee_id_jradiobutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        employee_id_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 employee_id_jradiobuttonActionPerformed(evt);
             }
         });
 
-        search_last_name_jtextfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        search_last_name_jtextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 search_last_name_jtextfieldActionPerformed(evt);
             }
         });
 
-        search_employee_id_jtextfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        search_employee_id_jtextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 search_employee_id_jtextfieldActionPerformed(evt);
             }
         });
 
         search_jbutton.setText("Search");
-        search_jbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        search_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 search_jbuttonActionPerformed(evt);
             }
         });
@@ -364,7 +335,7 @@ public class UsersDisplay extends javax.swing.JFrame
                 .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(search_jpanelLayout.createSequentialGroup()
                         .addComponent(first_name_jradiobutton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(search_first_name_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(search_jpanelLayout.createSequentialGroup()
                         .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -372,9 +343,9 @@ public class UsersDisplay extends javax.swing.JFrame
                             .addComponent(employee_id_jradiobutton))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(search_employee_id_jtextfield, javax.swing.GroupLayout.DEFAULT_SIZE, 121, Short.MAX_VALUE)
+                            .addComponent(search_employee_id_jtextfield)
                             .addComponent(search_last_name_jtextfield))))
-                .addContainerGap(133, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(search_jpanelLayout.createSequentialGroup()
                 .addGap(136, 136, 136)
                 .addComponent(search_jbutton)
@@ -397,7 +368,7 @@ public class UsersDisplay extends javax.swing.JFrame
                     .addComponent(employee_id_jradiobutton))
                 .addGap(39, 39, 39)
                 .addComponent(search_jbutton)
-                .addContainerGap(365, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         option_jtabbedpane.addTab("Search", null, search_jpanel, "");
@@ -405,10 +376,8 @@ public class UsersDisplay extends javax.swing.JFrame
         button_panel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         menu_jbutton.setText("Menu");
-        menu_jbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        menu_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_jbuttonActionPerformed(evt);
             }
         });
@@ -425,74 +394,25 @@ public class UsersDisplay extends javax.swing.JFrame
         button_panelLayout.setVerticalGroup(
             button_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(button_panelLayout.createSequentialGroup()
-                .addContainerGap(61, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(menu_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
 
         product_table_jpanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        product_jtable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null},
-                {null, null, null, null, null, null, null}
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
-            new String []
-            {
-                "Id", "First Name", "Last Name", "Address", "SSN", "Wage", "Hours"
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        product_jtable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPane1.setViewportView(product_jtable);
+        jScrollPane2.setViewportView(jTable1);
 
         javax.swing.GroupLayout product_table_jpanelLayout = new javax.swing.GroupLayout(product_table_jpanel);
         product_table_jpanel.setLayout(product_table_jpanelLayout);
@@ -500,16 +420,19 @@ public class UsersDisplay extends javax.swing.JFrame
             product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(product_table_jpanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 915, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
         product_table_jpanelLayout.setVerticalGroup(
             product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 882, Short.MAX_VALUE)
+            .addGroup(product_table_jpanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2)
+                .addContainerGap())
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -532,45 +455,11 @@ public class UsersDisplay extends javax.swing.JFrame
                 .addContainerGap())
             .addComponent(product_table_jpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        option_jtabbedpane.getAccessibleContext().setAccessibleName("");
-        option_jtabbedpane.getAccessibleContext().setAccessibleDescription("");
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void menu_jbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menu_jbuttonActionPerformed
-    {//GEN-HEADEREND:event_menu_jbuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menu_jbuttonActionPerformed
 
     private void first_name_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_textfieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_first_name_textfieldActionPerformed
-
-    private void search_employee_id_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_employee_id_jtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_employee_id_jtextfieldActionPerformed
-
-    private void search_last_name_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_last_name_jtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_last_name_jtextfieldActionPerformed
-
-    private void last_name_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_last_name_jradiobuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_last_name_jradiobuttonActionPerformed
-
-    private void first_name_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_jradiobuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_jradiobuttonActionPerformed
-
-    private void search_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_jbuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_jbuttonActionPerformed
-
-    private void employee_id_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employee_id_jradiobuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_employee_id_jradiobuttonActionPerformed
 
     private void ssn_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ssn_textfieldActionPerformed
         // TODO add your handling code here:
@@ -588,55 +477,35 @@ public class UsersDisplay extends javax.swing.JFrame
         // TODO add your handling code here:
     }//GEN-LAST:event_delete_user_jbuttonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(UsersDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(UsersDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(UsersDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(UsersDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void first_name_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_jradiobuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_first_name_jradiobuttonActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new UsersDisplay().setVisible(true);
-            }
-        });
-    }
+    private void last_name_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_last_name_jradiobuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_last_name_jradiobuttonActionPerformed
+
+    private void employee_id_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employee_id_jradiobuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_employee_id_jradiobuttonActionPerformed
+
+    private void search_last_name_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_last_name_jtextfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_last_name_jtextfieldActionPerformed
+
+    private void search_employee_id_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_employee_id_jtextfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_employee_id_jtextfieldActionPerformed
+
+    private void search_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_jbuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_jbuttonActionPerformed
+
+    private void menu_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_jbuttonActionPerformed
+        CardLayout card = (CardLayout)this.getParent().getLayout();
+        card.show(this.getParent(), "launcherMenuPanel");
+    }//GEN-LAST:event_menu_jbuttonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_user_jbutton;
@@ -656,7 +525,8 @@ public class UsersDisplay extends javax.swing.JFrame
     private javax.swing.JTextField hours_textfield;
     private javax.swing.JLabel icon_jLabel;
     private javax.swing.JPanel icon_jpanel;
-    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel last_name_jlabel;
     private javax.swing.JRadioButton last_name_jradiobutton;
     private javax.swing.JTextField last_name_textfield;
@@ -668,14 +538,12 @@ public class UsersDisplay extends javax.swing.JFrame
     private javax.swing.JTabbedPane option_jtabbedpane;
     private javax.swing.JLabel password_jlabel;
     private javax.swing.JTextField password_textfield;
-    private javax.swing.JTable product_jtable;
     private javax.swing.JPanel product_table_jpanel;
     private javax.swing.JTextField search_employee_id_jtextfield;
     private javax.swing.JTextField search_first_name_jtextfield;
     private javax.swing.JButton search_jbutton;
     private javax.swing.JPanel search_jpanel;
     private javax.swing.JTextField search_last_name_jtextfield;
-    private javax.swing.ButtonGroup search_panel_button_group;
     private javax.swing.JLabel ssn_jlabel;
     private javax.swing.JTextField ssn_textfield;
     private javax.swing.JPanel user_jpanel;
