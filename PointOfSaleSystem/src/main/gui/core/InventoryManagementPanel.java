@@ -1,23 +1,22 @@
-package Gui;
-
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+package main.gui.core;
+
+import java.awt.CardLayout;
 
 /**
  *
- * @author Matt HP
+ * @author Dakota
  */
-public class InventoryDisplay extends javax.swing.JFrame
-{
+public class InventoryManagementPanel extends javax.swing.JPanel {
 
     /**
-     * Creates new form NewJFrame
+     * Creates new form InventoryManagementPanel
      */
-    public InventoryDisplay()
-    {
+    public InventoryManagementPanel() {
         initComponents();
     }
 
@@ -28,10 +27,8 @@ public class InventoryDisplay extends javax.swing.JFrame
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents()
-    {
+    private void initComponents() {
 
-        search_panel_button_group = new javax.swing.ButtonGroup();
         logo_jpanel = new javax.swing.JPanel();
         loco_icon_panel = new javax.swing.JPanel();
         logo_jlabel = new javax.swing.JLabel();
@@ -88,8 +85,7 @@ public class InventoryDisplay extends javax.swing.JFrame
         jScrollPane1 = new javax.swing.JScrollPane();
         product_jtable = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("INVENTORY");
+        setPreferredSize(new java.awt.Dimension(1878, 1038));
 
         logo_jpanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -104,14 +100,14 @@ public class InventoryDisplay extends javax.swing.JFrame
             .addGroup(loco_icon_panelLayout.createSequentialGroup()
                 .addGap(26, 26, 26)
                 .addComponent(logo_jlabel)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         loco_icon_panelLayout.setVerticalGroup(
             loco_icon_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(loco_icon_panelLayout.createSequentialGroup()
                 .addGap(23, 23, 23)
                 .addComponent(logo_jlabel)
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         company_name_label.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -138,23 +134,17 @@ public class InventoryDisplay extends javax.swing.JFrame
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        search_panel_button_group.add(product_name_jradiobutton);
         product_name_jradiobutton.setText("Product Name :");
 
-        search_panel_button_group.add(product_id_jradiobutton);
         product_id_jradiobutton.setText("Product Id :");
-        product_id_jradiobutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        product_id_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 product_id_jradiobuttonActionPerformed(evt);
             }
         });
 
-        search_product_id_textfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        search_product_id_textfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 search_product_id_textfieldActionPerformed(evt);
             }
         });
@@ -180,7 +170,7 @@ public class InventoryDisplay extends javax.swing.JFrame
                                 .addGap(10, 10, 10)
                                 .addComponent(search_jbutton))
                             .addComponent(search_product_id_textfield))))
-                .addContainerGap(109, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         search_jpanelLayout.setVerticalGroup(
             search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -195,7 +185,7 @@ public class InventoryDisplay extends javax.swing.JFrame
                     .addComponent(search_product_id_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(search_jbutton)
-                .addContainerGap(312, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         option_jtabbedpane.addTab("Search", null, search_jpanel, "");
@@ -211,7 +201,7 @@ public class InventoryDisplay extends javax.swing.JFrame
         icon_jpanelLayout.setHorizontalGroup(
             icon_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, icon_jpanelLayout.createSequentialGroup()
-                .addContainerGap(34, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(icon_jLabel)
                 .addGap(32, 32, 32))
         );
@@ -220,47 +210,39 @@ public class InventoryDisplay extends javax.swing.JFrame
             .addGroup(icon_jpanelLayout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(icon_jLabel)
-                .addContainerGap(46, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         product_jlabel.setText("Product ID:");
 
         product_name_jbutton.setText("Product Name: ");
 
-        product_name_textfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        product_name_textfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 product_name_textfieldActionPerformed(evt);
             }
         });
 
         quantity_jlabel.setText("Qty :");
 
-        quantity_jtextfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        quantity_jtextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 quantity_jtextfieldActionPerformed(evt);
             }
         });
 
         price_jlabel.setText("Price :");
 
-        price_jtextfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        price_jtextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 price_jtextfieldActionPerformed(evt);
             }
         });
 
         category_jlabel.setText("Category :");
 
-        category_jtextfield.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        category_jtextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 category_jtextfieldActionPerformed(evt);
             }
         });
@@ -298,7 +280,7 @@ public class InventoryDisplay extends javax.swing.JFrame
                         .addComponent(description_jscrollpane)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, product_jpanelLayout.createSequentialGroup()
-                .addGap(0, 71, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(category_jlabel)
                     .addComponent(quantity_jlabel))
@@ -411,7 +393,7 @@ public class InventoryDisplay extends javax.swing.JFrame
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(55, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -493,7 +475,7 @@ public class InventoryDisplay extends javax.swing.JFrame
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filter_jbutton)
-                .addGap(0, 148, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         option_jtabbedpane.addTab("Filter", filter_jpanel);
@@ -501,10 +483,8 @@ public class InventoryDisplay extends javax.swing.JFrame
         button_panel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         transaction_jbutton.setText("Transactions");
-        transaction_jbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        transaction_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 transaction_jbuttonActionPerformed(evt);
             }
         });
@@ -512,10 +492,8 @@ public class InventoryDisplay extends javax.swing.JFrame
         admin_jbutton.setText("Admin");
 
         menu_jbutton.setText("Menu");
-        menu_jbutton.addActionListener(new java.awt.event.ActionListener()
-        {
-            public void actionPerformed(java.awt.event.ActionEvent evt)
-            {
+        menu_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menu_jbuttonActionPerformed(evt);
             }
         });
@@ -533,8 +511,8 @@ public class InventoryDisplay extends javax.swing.JFrame
                     .addComponent(menu_jbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(button_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(admin_jbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(add_to_cart_jbutton, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE))
+                    .addComponent(add_to_cart_jbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(admin_jbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(39, 39, 39))
         );
         button_panelLayout.setVerticalGroup(
@@ -554,8 +532,7 @@ public class InventoryDisplay extends javax.swing.JFrame
         product_table_jpanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         product_jtable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][]
-            {
+            new Object [][] {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -607,30 +584,25 @@ public class InventoryDisplay extends javax.swing.JFrame
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
             },
-            new String []
-            {
+            new String [] {
                 "Id", "Product Name", "Size", "Quantity", "Price", "Category"
             }
         ));
-        product_jtable.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane1.setViewportView(product_jtable);
 
         javax.swing.GroupLayout product_table_jpanelLayout = new javax.swing.GroupLayout(product_table_jpanel);
         product_table_jpanel.setLayout(product_table_jpanelLayout);
         product_table_jpanelLayout.setHorizontalGroup(
             product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(product_table_jpanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 915, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addComponent(jScrollPane1)
         );
         product_table_jpanelLayout.setVerticalGroup(
             product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
@@ -644,111 +616,49 @@ public class InventoryDisplay extends javax.swing.JFrame
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(logo_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(option_jtabbedpane, javax.swing.GroupLayout.DEFAULT_SIZE, 745, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(option_jtabbedpane)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(button_panel, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addComponent(button_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
             .addComponent(product_table_jpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
-
-        option_jtabbedpane.getAccessibleContext().setAccessibleName("");
-        option_jtabbedpane.getAccessibleContext().setAccessibleDescription("");
-
-        pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void menu_jbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_menu_jbuttonActionPerformed
-    {//GEN-HEADEREND:event_menu_jbuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menu_jbuttonActionPerformed
-
-    private void price_jtextfieldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_price_jtextfieldActionPerformed
-    {//GEN-HEADEREND:event_price_jtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_price_jtextfieldActionPerformed
-
-    private void quantity_jtextfieldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_quantity_jtextfieldActionPerformed
-    {//GEN-HEADEREND:event_quantity_jtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_quantity_jtextfieldActionPerformed
-
-    private void category_jtextfieldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_category_jtextfieldActionPerformed
-    {//GEN-HEADEREND:event_category_jtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_category_jtextfieldActionPerformed
-
-    private void product_name_textfieldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_product_name_textfieldActionPerformed
-    {//GEN-HEADEREND:event_product_name_textfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_product_name_textfieldActionPerformed
-
-    private void transaction_jbuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_transaction_jbuttonActionPerformed
-    {//GEN-HEADEREND:event_transaction_jbuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_transaction_jbuttonActionPerformed
-
-    private void search_product_id_textfieldActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_search_product_id_textfieldActionPerformed
-    {//GEN-HEADEREND:event_search_product_id_textfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_product_id_textfieldActionPerformed
-
-    private void product_id_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_product_id_jradiobuttonActionPerformed
-    {//GEN-HEADEREND:event_product_id_jradiobuttonActionPerformed
+    private void product_id_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_product_id_jradiobuttonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_product_id_jradiobuttonActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[])
-    {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try
-        {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels())
-            {
-                if ("Nimbus".equals(info.getName()))
-                {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        }
-        catch (ClassNotFoundException ex)
-        {
-            java.util.logging.Logger.getLogger(InventoryDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (InstantiationException ex)
-        {
-            java.util.logging.Logger.getLogger(InventoryDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (IllegalAccessException ex)
-        {
-            java.util.logging.Logger.getLogger(InventoryDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        catch (javax.swing.UnsupportedLookAndFeelException ex)
-        {
-            java.util.logging.Logger.getLogger(InventoryDisplay.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
+    private void search_product_id_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_product_id_textfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_search_product_id_textfieldActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            public void run()
-            {
-                new InventoryDisplay().setVisible(true);
-            }
-        });
-    }
+    private void product_name_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_product_name_textfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_product_name_textfieldActionPerformed
+
+    private void quantity_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantity_jtextfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_quantity_jtextfieldActionPerformed
+
+    private void price_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_price_jtextfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_price_jtextfieldActionPerformed
+
+    private void category_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_category_jtextfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_category_jtextfieldActionPerformed
+
+    private void transaction_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transaction_jbuttonActionPerformed
+        CardLayout card = (CardLayout)this.getParent().getLayout();
+        card.show(this.getParent(), "transactionsPanel");
+    }//GEN-LAST:event_transaction_jbuttonActionPerformed
+
+    private void menu_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_jbuttonActionPerformed
+        CardLayout card = (CardLayout)this.getParent().getLayout();
+        card.show(this.getParent(), "launcherMenuPanel");
+    }//GEN-LAST:event_menu_jbuttonActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_to_cart_jbutton;
@@ -801,7 +711,6 @@ public class InventoryDisplay extends javax.swing.JFrame
     private javax.swing.JTextField quantity_jtextfield;
     private javax.swing.JButton search_jbutton;
     private javax.swing.JPanel search_jpanel;
-    private javax.swing.ButtonGroup search_panel_button_group;
     private javax.swing.JTextField search_product_id_textfield;
     private javax.swing.JTextField search_product_name_jtextfield;
     private javax.swing.JTextField size_jtextfield;

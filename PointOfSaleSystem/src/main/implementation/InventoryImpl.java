@@ -3,39 +3,41 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Implementation;
+package main.implementation;
 
-import Structures.Employee;
+import main.structures.Product;
+import java.util.ArrayList;
 
-/**
- *
- * @author Matt HP
- */
-public class EmployeeImpl implements Interfaces.Employee_I
+public class InventoryImpl implements main.interfaces.InventoryInterfaceForManagers_I
 {
-
     @Override
-    public Employee getEmployee(String id)
+    public void updateProduct(Product update_product_id)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void addEmployee(Employee new_employee)
+    public void addProduct(Product new_product)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void updateEmployee(Employee update_employee)
+    public void deleteProduct(String product_id)
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public void deleteEmployee(String id)
+    public Product getProduct(String product_id_number)
+    {
+        Product product = new Product();
+        return product;
+    }
+
+    @Override
+    public ArrayList<Product> getAllProducts()
     {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-}
+ }
