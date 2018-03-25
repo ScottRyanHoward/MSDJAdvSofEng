@@ -11,8 +11,7 @@ package main.structures;
  */
 public class Employee
 {
-
-    private String employee_id;
+ private String employee_id;
     private String first_name;
     private String last_name;
     private String address;
@@ -20,6 +19,7 @@ public class Employee
     private String account_password;
     private double wage;
     private double hours;
+    private boolean is_admin;
 
     public Employee()
     {
@@ -36,7 +36,7 @@ public class Employee
     /**
      * @return the employee_id
      */
-    public String getEmployee_id()
+    public String getEmployeeId()
     {
         return employee_id;
     }
@@ -44,7 +44,7 @@ public class Employee
     /**
      * @param employee_id the employee_id to set
      */
-    public void setEmployee_id(String employee_id)
+    public void setEmployeeId(String employee_id)
     {
         this.employee_id = employee_id;
     }
@@ -52,7 +52,7 @@ public class Employee
     /**
      * @return the first_name
      */
-    public String getFirst_name()
+    public String getFirstName()
     {
         return first_name;
     }
@@ -60,15 +60,24 @@ public class Employee
     /**
      * @param first_name the first_name to set
      */
-    public void setFirst_name(String first_name)
+    public void setFirstName(String first_name)
     {
         this.first_name = first_name;
     }
 
+        /**
+     * @return the last_name
+     */
+    public String getLastName()
+    {
+        return last_name;
+    }
+
+    
     /**
      * @param last_name the last_name to set
      */
-    public void setLast_name(String last_name)
+    public void setLastName(String last_name)
     {
         this.last_name = last_name;
     }
@@ -108,7 +117,7 @@ public class Employee
     /**
      * @return the account_password
      */
-    public String getAccount_password()
+    public String getAccountPassword()
     {
         return account_password;
     }
@@ -116,7 +125,7 @@ public class Employee
     /**
      * @param account_password the account_password to set
      */
-    public void setAccount_password(String account_password)
+    public void setAccountPassword(String account_password)
     {
         this.account_password = account_password;
     }
@@ -151,5 +160,20 @@ public class Employee
     public void setHours(double hours)
     {
         this.hours = hours;
+    }
+        /**
+     * @return the is_admin
+     */
+    public boolean getIsAdmin()
+    {
+        return is_admin;
+    }
+
+    /**
+     * @param is_admin the is_admin to set
+     */
+    public void setIsAdmin(boolean is_admin)
+    {
+        this.is_admin = is_admin;
     }
 }

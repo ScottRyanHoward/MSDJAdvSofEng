@@ -6,6 +6,7 @@
 package main.interfaces;
 
 import main.structures.Employee;
+import java.util.ArrayList;
 
 /**
  *
@@ -17,5 +18,5 @@ public interface Employee_I
     void addEmployee(Employee new_employee);
     void updateEmployee(Employee update_employee);
     void deleteEmployee(String id);
-    
+    ArrayList<Employee> getAllEmployees();    
 }
