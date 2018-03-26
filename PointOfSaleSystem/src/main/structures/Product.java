@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Structures;
+package main.structures;
 
 public class Product
 {
@@ -33,23 +33,15 @@ public class Product
     /**
      * @return the product_id
      */
-    public String getProductId()
+    public String getProduct_id()
     {
         return product_id;
-    }
-
-        /**
-     * @param product_id the product id to set
-     */
-    public void setProductId(String product_id)
-    {
-        this.product_id = product_id;
     }
 
     /**
      * @return the product_name
      */
-    public String getProductName()
+    public String getProduct_name()
     {
         return product_name;
     }
@@ -57,7 +49,7 @@ public class Product
     /**
      * @param product_name the product_name to set
      */
-    public void setProductName(String product_name)
+    public void setProduct_name(String product_name)
     {
         this.product_name = product_name;
     }
