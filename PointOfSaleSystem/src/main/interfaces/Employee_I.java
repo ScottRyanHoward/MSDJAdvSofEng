@@ -7,7 +7,6 @@ package main.interfaces;
 
 import main.structures.Employee;
 import java.util.ArrayList;
-
 /**
  *
  * @author Matt HP

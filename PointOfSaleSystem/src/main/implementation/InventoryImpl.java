@@ -13,6 +13,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import main.structures.Product;
 import java.util.ArrayList;
 
 public class InventoryImpl implements main.interfaces.InventoryInterfaceForManagers_I
@@ -45,6 +46,10 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
         "category = " +  update_product_id.getCategory().name() + 
         "WHERE product_id = " + original_product_id;
         executeSqlStatement(query);
+    @Override
+    public void updateProduct(Product update_product_id)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -56,6 +61,7 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
         new_product.getQuantity() + "," + new_product.getCategory().name() + ")";
        
         executeSqlStatement(query);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -65,6 +71,7 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
         "WHERE product_id = " + product_id;                
       
         executeSqlStatement(query);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -100,8 +107,7 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
 
     @Override
     public ArrayList<Product> getAllProducts()
-    {
-         
+    {         
         ArrayList<Product> product_list = new ArrayList();
         
         try

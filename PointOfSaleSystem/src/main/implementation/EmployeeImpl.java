@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import main.structures.Employee;
 
 /**
  *
@@ -121,6 +122,13 @@ public class EmployeeImpl implements main.interfaces.Employee_I
         new_employee.getIsAdmin() + ")";
        
         executeSqlStatement(query);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void addEmployee(Employee new_employee)
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -138,6 +146,8 @@ public class EmployeeImpl implements main.interfaces.Employee_I
         "is_admin = " +  Boolean.toString(update_employee.getIsAdmin()) + 
         "WHERE employee_id = " + update_employee;
         executeSqlStatement(query);
+    {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
@@ -147,6 +157,7 @@ public class EmployeeImpl implements main.interfaces.Employee_I
         "WHERE employee_id = " + id;                
       
         executeSqlStatement(query);
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }
