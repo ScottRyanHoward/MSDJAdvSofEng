@@ -46,6 +46,8 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
         "category = " +  update_product_id.getCategory().name() + 
         "WHERE product_id = " + original_product_id;
         executeSqlStatement(query);
+    }
+    
     @Override
     public void updateProduct(Product update_product_id)
     {

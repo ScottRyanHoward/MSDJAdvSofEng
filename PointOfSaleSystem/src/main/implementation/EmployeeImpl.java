@@ -126,12 +126,6 @@ public class EmployeeImpl implements main.interfaces.Employee_I
     }
 
     @Override
-    public void addEmployee(Employee new_employee)
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
     public void updateEmployee(Employee update_employee)
     {        
         String query = "UPDATE employee "  + "SET " +
@@ -146,8 +140,6 @@ public class EmployeeImpl implements main.interfaces.Employee_I
         "is_admin = " +  Boolean.toString(update_employee.getIsAdmin()) + 
         "WHERE employee_id = " + update_employee;
         executeSqlStatement(query);
-    {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
