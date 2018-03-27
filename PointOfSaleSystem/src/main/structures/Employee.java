@@ -11,8 +11,6 @@ package main.structures;
  */
 public class Employee
 {
- private String employee_id;
-
     private String employee_id;
     private String first_name;
     private String last_name;
@@ -39,7 +37,6 @@ public class Employee
      * @return the employee_id
      */
     public String getEmployeeId()
-    public String getEmployee_id()
     {
         return employee_id;
     }
@@ -48,7 +45,6 @@ public class Employee
      * @param employee_id the employee_id to set
      */
     public void setEmployeeId(String employee_id)
-    public void setEmployee_id(String employee_id)
     {
         this.employee_id = employee_id;
     }
@@ -82,10 +78,6 @@ public class Employee
      * @param last_name the last_name to set
      */
     public void setLastName(String last_name)
-    /**
-     * @param last_name the last_name to set
-     */
-    public void setLast_name(String last_name)
     {
         this.last_name = last_name;
     }
