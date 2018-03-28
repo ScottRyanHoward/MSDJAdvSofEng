@@ -31,7 +31,7 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
         }
         catch (SQLException e)
         {
-            System.out.println("updateProduct " + e);
+            System.out.println("executeSqlStatement " + e);
         }
     }
     @Override
@@ -109,15 +109,21 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
 
     @Override
     public ArrayList<Product> getAllProducts()
-    {         
+    {
+        String command = "SELECT * FROM Product ";   
+        return searchProducts(command);
+    }
+
+    @Override
+   public ArrayList<Product> searchProducts(String query)
+   {
         ArrayList<Product> product_list = new ArrayList();
         
         try
         {
             connection = db_connection.connectToDatabase();
             Statement statement = connection.createStatement();
-            String command = "SELECT * FROM Product ";
-            ResultSet result = statement.executeQuery(command);
+            ResultSet result = statement.executeQuery(query);
             
             if (null != result)
             {
@@ -127,7 +133,7 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
                     product.setProductId(result.getString("product_id"));
                     product.setProductName(result.getString("product_name"));
                     product.setDescription(result.getString("description"));
-                    product.setCategory((Product.Category.values())[Integer.parseInt(result.getString("category"))]);
+//                    product.setCategory((Product.Category.values())[Integer.parseInt(result.getString("category"))]);
                     product.setPrice(Double.parseDouble(result.getString("price")));
                     product.setQuantity(Integer.parseInt(result.getString("quantity")));
                     product_list.add(product);
@@ -139,5 +145,5 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
             System.out.println("getAllProducts " + e);
         }
         return product_list;
-    }
+   }
 }

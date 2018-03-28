@@ -37,7 +37,7 @@
           <Group type="102" attributes="0">
               <Component id="logo_jpanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Component id="option_jtabbedpane" pref="745" max="32767" attributes="0"/>
+              <Component id="option_jtabbedpane" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="button_panel" min="-2" max="-2" attributes="0"/>
           </Group>
@@ -212,6 +212,9 @@
               <Properties>
                 <Property name="text" type="java.lang.String" value="Search"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="search_jbuttonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
@@ -235,37 +238,8 @@
           <Layout>
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="product_name_jbutton" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  <Component id="product_jlabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                                      <Component id="icon_jpanel" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" alignment="0" attributes="0">
-                                      <EmptySpace max="-2" attributes="0"/>
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Component id="product_name_textfield" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
-                                          <Component id="product_id_textfield" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
-                                      </Group>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="description_jlabel" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="description_jscrollpane" max="32767" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace max="32767" attributes="0"/>
-                  </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <EmptySpace min="0" pref="26" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="category_jlabel" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="quantity_jlabel" alignment="1" min="-2" max="-2" attributes="0"/>
@@ -288,6 +262,41 @@
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Group type="103" groupAlignment="1" attributes="0">
+                                      <Component id="product_name_jbutton" alignment="1" min="-2" max="-2" attributes="0"/>
+                                      <Component id="product_jlabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                                  </Group>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
+                                          <Component id="icon_jpanel" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Component id="product_name_textfield" alignment="0" min="-2" pref="176" max="-2" attributes="0"/>
+                                              <Component id="product_id_textfield" alignment="0" min="-2" pref="145" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                              </Group>
+                              <Group type="102" alignment="0" attributes="0">
+                                  <Component id="description_jlabel" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Component id="description_jscrollpane" max="32767" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace min="-2" pref="100" max="-2" attributes="0"/>
+                              <Component id="add_product_button" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -327,7 +336,9 @@
                           <Component id="description_jlabel" alignment="0" min="-2" max="-2" attributes="0"/>
                           <Component id="description_jscrollpane" alignment="0" min="-2" pref="122" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="361" max="32767" attributes="0"/>
+                      <Component id="add_product_button" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -443,6 +454,18 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="size_jtextfield">
+            </Component>
+            <Component class="javax.swing.JButton" name="add_product_button">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Add Product"/>
+                <Property name="toolTipText" type="java.lang.String" value=""/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="add_product_buttonActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="if(admin_token)&#xd;&#xa;{&#xd;&#xa;  add_product_button.setEnabled(true);&#xd;&#xa;}&#xd;&#xa;else&#xd;&#xa;  add_product_button.setEnabled(false);&#xd;&#xa;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>
@@ -802,13 +825,14 @@
             <Component class="javax.swing.JTable" name="product_jtable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="6" rowCount="50">
+                  <Table columnCount="7" rowCount="0">
                     <Column editable="true" title="Id" type="java.lang.Object"/>
-                    <Column editable="true" title="Product Name" type="java.lang.Object"/>
-                    <Column editable="true" title="Size" type="java.lang.Object"/>
-                    <Column editable="true" title="Quantity" type="java.lang.Object"/>
-                    <Column editable="true" title="Price" type="java.lang.Object"/>
                     <Column editable="true" title="Category" type="java.lang.Object"/>
+                    <Column editable="true" title="Product Name" type="java.lang.Object"/>
+                    <Column editable="true" title="Description" type="java.lang.Object"/>
+                    <Column editable="true" title="Size" type="java.lang.Object"/>
+                    <Column editable="true" title="Price" type="java.lang.Object"/>
+                    <Column editable="true" title="Quanitity" type="java.lang.Object"/>
                   </Table>
                 </Property>
               </Properties>
