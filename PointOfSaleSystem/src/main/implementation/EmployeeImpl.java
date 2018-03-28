@@ -17,7 +17,8 @@ import java.util.ArrayList;
  *
  * @author Matt HP
  */
-public class EmployeeImpl implements main.interfaces.Employee_I
+public class EmployeeImpl implements main.interfaces.Employee_I, 
+                                     main.interfaces.Login_I
 {
     private Connection connection;
     private DatabaseConnection_I db_connection;
@@ -147,6 +148,36 @@ public class EmployeeImpl implements main.interfaces.Employee_I
         "WHERE employee_id = " + id;                
       
         executeSqlStatement(query);
+    }
+    
+    /**
+     *
+     * @param username
+     * @param password
+     * @return
+     */
+    @Override
+    public boolean checkLogin(String employee_id, String password)
+    {
+        try
+        {
+          connection = db_connection.connectToDatabase();
+          Statement statement = connection.createStatement();
+          String command = "SELECT * FROM employee where employee_id = '" +employee_id + 
+                  "'AND account_password = '" + password + "'";
+                  
+          ResultSet result = statement.executeQuery(command);
+            
+            if (null != result)
+            {
+               return true;
+            }
+        }
+        catch (SQLException e)
+        {
+            System.out.println("getProduct " + e);
+        } 
+       return false;
     }
     
 }
