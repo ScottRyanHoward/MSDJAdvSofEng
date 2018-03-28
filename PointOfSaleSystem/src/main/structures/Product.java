@@ -37,7 +37,7 @@ public class Product
     {
         return product_id;
     }
-
+  
         /**
      * @param product_id the product id to set
      */
