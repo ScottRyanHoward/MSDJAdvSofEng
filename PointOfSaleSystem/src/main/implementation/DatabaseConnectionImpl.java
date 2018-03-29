@@ -36,9 +36,9 @@ public class DatabaseConnectionImpl implements DatabaseConnection_I
             }
         try
         {
-                       String url = "jdbc:mysql://localhost:3306/pos_system";
+            String url = "jdbc:mysql://localhost:3306/pos_system";
                        
-          con = DriverManager.getConnection(url,"root","MSDJ");
+            con = DriverManager.getConnection(url,"root","MSDJ");
           
              System.out.println("Connected!"); 
              return con;
