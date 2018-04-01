@@ -32,24 +32,24 @@ public class ShelvsUI extends javax.swing.JFrame {
     private void initComponents() {
 
         shelvsPanel = new javax.swing.JPanel();
-        loginPanel = new main.gui.core.LoginPanel();
         launcherMenuPanel = new main.gui.core.LauncherMenuPanel();
         inventoryManagementPanel = new main.gui.core.InventoryManagementPanel();
         transactionsPanel = new main.gui.core.TransactionsPanel();
         salesMetricsPanel = new main.gui.core.SalesMetricsPanel();
         userManagementPanel = new main.gui.core.UserManagementPanel();
+        loginPanel = new main.gui.core.LoginPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
 
         shelvsPanel.setPreferredSize(new java.awt.Dimension(1878, 1038));
         shelvsPanel.setLayout(new java.awt.CardLayout());
-        shelvsPanel.add(loginPanel, "loginPanel");
         shelvsPanel.add(launcherMenuPanel, "launcherMenuPanel");
         shelvsPanel.add(inventoryManagementPanel, "inventoryManagementPanel");
         shelvsPanel.add(transactionsPanel, "transactionsPanel");
         shelvsPanel.add(salesMetricsPanel, "salesMetricsPanel");
         shelvsPanel.add(userManagementPanel, "userManagementPanel");
+        shelvsPanel.add(loginPanel, "loginPanel");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
