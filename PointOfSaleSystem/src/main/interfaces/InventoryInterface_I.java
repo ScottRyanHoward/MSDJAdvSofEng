@@ -17,5 +17,6 @@ public interface InventoryInterface_I
 {
    Product getProduct(String product_id_number);
    ArrayList<Product> getAllProducts();
-   
+   ArrayList<Product> searchProducts(String query);
+
 }

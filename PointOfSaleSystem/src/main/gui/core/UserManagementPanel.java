@@ -6,6 +6,7 @@
 package main.gui.core;
 
 import java.awt.CardLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -18,6 +19,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
      */
     public UserManagementPanel() {
         initComponents();
+        this.EMPLOYEE_ID_COLUMN = 0;
     }
 
     /**
@@ -49,14 +51,22 @@ public class UserManagementPanel extends javax.swing.JPanel {
         wage_textfield = new javax.swing.JTextField();
         last_name_jlabel = new javax.swing.JLabel();
         last_name_textfield = new javax.swing.JTextField();
-        add_user_jbutton = new javax.swing.JButton();
-        delete_user_jbutton = new javax.swing.JButton();
-        modify_user_jbutton = new javax.swing.JButton();
         hours_jlabel = new javax.swing.JLabel();
         hours_textfield = new javax.swing.JTextField();
         password_jlabel = new javax.swing.JLabel();
         password_textfield = new javax.swing.JTextField();
         admin_checkbox = new javax.swing.JCheckBox();
+        user_dynamic_button_panel = new javax.swing.JPanel();
+        user_standard_buttons = new javax.swing.JPanel();
+        add_user_jbutton = new javax.swing.JButton();
+        modify_user_jbutton = new javax.swing.JButton();
+        delete_user_jbutton = new javax.swing.JButton();
+        user_add_buttons = new javax.swing.JPanel();
+        submit_add_user_button = new javax.swing.JButton();
+        cancel_add_user_button = new javax.swing.JButton();
+        user_modify_buttons = new javax.swing.JPanel();
+        submit_modify_user_button = new javax.swing.JButton();
+        cancel_modify_user_button = new javax.swing.JButton();
         search_jpanel = new javax.swing.JPanel();
         first_name_jradiobutton = new javax.swing.JRadioButton();
         last_name_jradiobutton = new javax.swing.JRadioButton();
@@ -67,9 +77,9 @@ public class UserManagementPanel extends javax.swing.JPanel {
         search_jbutton = new javax.swing.JButton();
         button_panel = new javax.swing.JPanel();
         menu_jbutton = new javax.swing.JButton();
-        product_table_jpanel = new javax.swing.JPanel();
+        user_table_jpanel = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        user_jtable = new javax.swing.JTable();
 
         setPreferredSize(new java.awt.Dimension(1878, 1038));
 
@@ -147,6 +157,9 @@ public class UserManagementPanel extends javax.swing.JPanel {
 
         first_name_jlabel.setText("First Name : ");
 
+        employee_id_textfield.setEditable(false);
+
+        first_name_textfield.setEditable(false);
         first_name_textfield.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 first_name_textfieldActionPerformed(evt);
@@ -155,8 +168,11 @@ public class UserManagementPanel extends javax.swing.JPanel {
 
         address_jlabel.setText("Address :");
 
+        address_textfield.setEditable(false);
+
         ssn_jlabel.setText("SSN :");
 
+        ssn_textfield.setEditable(false);
         ssn_textfield.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 ssn_textfieldActionPerformed(evt);
@@ -165,6 +181,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
 
         wage_jlabel.setText("Wage :");
 
+        wage_textfield.setEditable(false);
         wage_textfield.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 wage_textfieldActionPerformed(evt);
@@ -173,6 +190,22 @@ public class UserManagementPanel extends javax.swing.JPanel {
 
         last_name_jlabel.setText("Last Name :");
 
+        last_name_textfield.setEditable(false);
+
+        hours_jlabel.setText("Hours :");
+
+        hours_textfield.setEditable(false);
+
+        password_jlabel.setText("Password");
+
+        password_textfield.setEditable(false);
+
+        admin_checkbox.setText("Administrator");
+        admin_checkbox.setEnabled(false);
+
+        user_dynamic_button_panel.setBackground(new java.awt.Color(255, 0, 255));
+        user_dynamic_button_panel.setLayout(new java.awt.CardLayout());
+
         add_user_jbutton.setText("Add User");
         add_user_jbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -180,20 +213,121 @@ public class UserManagementPanel extends javax.swing.JPanel {
             }
         });
 
+        modify_user_jbutton.setText("Modify User");
+        modify_user_jbutton.setEnabled(false);
+        modify_user_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                modify_user_jbuttonActionPerformed(evt);
+            }
+        });
+
         delete_user_jbutton.setText("Delete User");
+        delete_user_jbutton.setEnabled(false);
         delete_user_jbutton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 delete_user_jbuttonActionPerformed(evt);
             }
         });
 
-        modify_user_jbutton.setText("Modify User");
+        javax.swing.GroupLayout user_standard_buttonsLayout = new javax.swing.GroupLayout(user_standard_buttons);
+        user_standard_buttons.setLayout(user_standard_buttonsLayout);
+        user_standard_buttonsLayout.setHorizontalGroup(
+            user_standard_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(user_standard_buttonsLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(add_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(delete_user_jbutton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        user_standard_buttonsLayout.setVerticalGroup(
+            user_standard_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(user_standard_buttonsLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(user_standard_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(add_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delete_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
-        hours_jlabel.setText("Hours :");
+        user_dynamic_button_panel.add(user_standard_buttons, "userStandardButtonsPanel");
 
-        password_jlabel.setText("Password");
+        submit_add_user_button.setText("Submit");
+        submit_add_user_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submit_add_user_buttonActionPerformed(evt);
+            }
+        });
 
-        admin_checkbox.setText("Administrator");
+        cancel_add_user_button.setText("Cancel");
+        cancel_add_user_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel_add_user_buttonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout user_add_buttonsLayout = new javax.swing.GroupLayout(user_add_buttons);
+        user_add_buttons.setLayout(user_add_buttonsLayout);
+        user_add_buttonsLayout.setHorizontalGroup(
+            user_add_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(user_add_buttonsLayout.createSequentialGroup()
+                .addGap(35, 35, 35)
+                .addComponent(submit_add_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 70, Short.MAX_VALUE)
+                .addComponent(cancel_add_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59))
+        );
+        user_add_buttonsLayout.setVerticalGroup(
+            user_add_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, user_add_buttonsLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(user_add_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submit_add_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel_add_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        user_dynamic_button_panel.add(user_add_buttons, "userAddButtonsPanel");
+
+        submit_modify_user_button.setText("Submit");
+        submit_modify_user_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                submit_modify_user_buttonActionPerformed(evt);
+            }
+        });
+
+        cancel_modify_user_button.setText("Cancel");
+        cancel_modify_user_button.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel_modify_user_buttonActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout user_modify_buttonsLayout = new javax.swing.GroupLayout(user_modify_buttons);
+        user_modify_buttons.setLayout(user_modify_buttonsLayout);
+        user_modify_buttonsLayout.setHorizontalGroup(
+            user_modify_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(user_modify_buttonsLayout.createSequentialGroup()
+                .addGap(31, 31, 31)
+                .addComponent(submit_modify_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                .addComponent(cancel_modify_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59))
+        );
+        user_modify_buttonsLayout.setVerticalGroup(
+            user_modify_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, user_modify_buttonsLayout.createSequentialGroup()
+                .addContainerGap(23, Short.MAX_VALUE)
+                .addGroup(user_modify_buttonsLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(submit_modify_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cancel_modify_user_button, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        user_dynamic_button_panel.add(user_modify_buttons, "userModifyButtonsPanel");
 
         javax.swing.GroupLayout user_jpanelLayout = new javax.swing.GroupLayout(user_jpanel);
         user_jpanel.setLayout(user_jpanelLayout);
@@ -226,16 +360,13 @@ public class UserManagementPanel extends javax.swing.JPanel {
                 .addComponent(icon_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(user_jpanelLayout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(admin_checkbox)
-                    .addGroup(user_jpanelLayout.createSequentialGroup()
-                        .addComponent(add_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(18, 18, 18)
-                .addComponent(delete_user_jbutton)
+                .addGap(129, 129, 129)
+                .addComponent(admin_checkbox)
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, user_jpanelLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(user_dynamic_button_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         user_jpanelLayout.setVerticalGroup(
             user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,12 +407,9 @@ public class UserManagementPanel extends javax.swing.JPanel {
                     .addComponent(password_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addComponent(admin_checkbox)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(user_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(delete_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(modify_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(add_user_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26))
+                .addGap(32, 32, 32)
+                .addComponent(user_dynamic_button_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         option_jtabbedpane.addTab("User", null, user_jpanel, "");
@@ -335,17 +463,17 @@ public class UserManagementPanel extends javax.swing.JPanel {
                 .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(search_jpanelLayout.createSequentialGroup()
                         .addComponent(first_name_jradiobutton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
                         .addComponent(search_first_name_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(search_jpanelLayout.createSequentialGroup()
                         .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(last_name_jradiobutton)
                             .addComponent(employee_id_jradiobutton))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(search_employee_id_jtextfield)
-                            .addComponent(search_last_name_jtextfield))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(54, 54, 54)
+                        .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(search_last_name_jtextfield)
+                            .addComponent(search_employee_id_jtextfield))))
+                .addGap(74, 74, 74))
             .addGroup(search_jpanelLayout.createSequentialGroup()
                 .addGap(136, 136, 136)
                 .addComponent(search_jbutton)
@@ -399,9 +527,9 @@ public class UserManagementPanel extends javax.swing.JPanel {
                 .addGap(32, 32, 32))
         );
 
-        product_table_jpanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        user_table_jpanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        user_jtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -412,20 +540,25 @@ public class UserManagementPanel extends javax.swing.JPanel {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(jTable1);
+        user_jtable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                user_jtableMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(user_jtable);
 
-        javax.swing.GroupLayout product_table_jpanelLayout = new javax.swing.GroupLayout(product_table_jpanel);
-        product_table_jpanel.setLayout(product_table_jpanelLayout);
-        product_table_jpanelLayout.setHorizontalGroup(
-            product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(product_table_jpanelLayout.createSequentialGroup()
+        javax.swing.GroupLayout user_table_jpanelLayout = new javax.swing.GroupLayout(user_table_jpanel);
+        user_table_jpanel.setLayout(user_table_jpanelLayout);
+        user_table_jpanelLayout.setHorizontalGroup(
+            user_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(user_table_jpanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1450, Short.MAX_VALUE)
                 .addContainerGap())
         );
-        product_table_jpanelLayout.setVerticalGroup(
-            product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(product_table_jpanelLayout.createSequentialGroup()
+        user_table_jpanelLayout.setVerticalGroup(
+            user_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(user_table_jpanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jScrollPane2)
                 .addContainerGap())
@@ -441,7 +574,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
                     .addComponent(option_jtabbedpane)
                     .addComponent(button_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(product_table_jpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(user_table_jpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -450,10 +583,10 @@ public class UserManagementPanel extends javax.swing.JPanel {
                 .addComponent(logo_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(option_jtabbedpane, javax.swing.GroupLayout.PREFERRED_SIZE, 599, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
                 .addComponent(button_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(product_table_jpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(user_table_jpanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -470,11 +603,27 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_wage_textfieldActionPerformed
 
     private void add_user_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_user_jbuttonActionPerformed
-        // TODO add your handling code here:
+        clearUserFormData();
+        enableUserFormData();
+        
+        //Change the buttons to the new options for adding a user
+        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+        card.show(user_dynamic_button_panel, "userAddButtonsPanel");
     }//GEN-LAST:event_add_user_jbuttonActionPerformed
 
     private void delete_user_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_user_jbuttonActionPerformed
-        // TODO add your handling code here:
+        int user_selection;
+        user_selection = 
+                JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this user? (This cannot be undone)", "Delete User", JOptionPane. YES_NO_OPTION);
+        
+        if(0 == user_selection)
+        {
+            //TODO DELETE USER FROM DATABASE
+            clearUserFormData();
+            clearSelectedRow();
+        }
+        
+        
     }//GEN-LAST:event_delete_user_jbuttonActionPerformed
 
     private void first_name_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_jradiobuttonActionPerformed
@@ -506,13 +655,140 @@ public class UserManagementPanel extends javax.swing.JPanel {
         card.show(this.getParent(), "launcherMenuPanel");
     }//GEN-LAST:event_menu_jbuttonActionPerformed
 
+    private void user_jtableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_user_jtableMouseClicked
+        int new_selected_row = user_jtable.getSelectedRow();
+        
+        //If a the user selected a different row
+        if(new_selected_row != current_selected_row) {
+            
+            current_selected_row = new_selected_row;
+            String employee_id = (String)user_jtable.getValueAt(current_selected_row, EMPLOYEE_ID_COLUMN);
 
+            if(employee_id != null)
+            {
+                //TODO Get Employee data struct from DB interface and then set to display
+                //TODO Also either disable writabliity of matrix, or check if valid, since user can edit table right now
+                modify_user_jbutton.setEnabled(true);
+                delete_user_jbutton.setEnabled(true);
+            }
+            else
+            {
+                modify_user_jbutton.setEnabled(false);
+                delete_user_jbutton.setEnabled(false);
+            }
+            
+            disableUserFormData();
+            //Make sure that the standard buttons are shown
+            CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+            card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
+        
+            //TODO Put these into a set employee data function
+            //employee_id_textfield.setText((String)users_jtable.getValueAt(selected_row, EMPLOYEE_ID_COLUMN));
+            //first_name_textfield.setText((String)users_jtable.getValueAt(selected_row, FIRST_NAME_COLUMN));
+            //last_name_textfield.setText((String)users_jtable.getValueAt(selected_row, LAST_NAME_COLUMN));
+
+        }
+    }//GEN-LAST:event_user_jtableMouseClicked
+
+    private void modify_user_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modify_user_jbuttonActionPerformed
+        enableUserFormData();
+        
+        //Change the buttons to the new options for modifying a user
+        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+        card.show(user_dynamic_button_panel, "userModifyButtonsPanel");
+        
+    }//GEN-LAST:event_modify_user_jbuttonActionPerformed
+
+    private void submit_add_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit_add_user_buttonActionPerformed
+        // TODO Call database interface to create employee
+        
+        //Change back to the standard buttons
+        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+        card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
+        
+        disableUserFormData();
+    }//GEN-LAST:event_submit_add_user_buttonActionPerformed
+
+    private void cancel_add_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_add_user_buttonActionPerformed
+        //Change back to the standard buttons
+        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+        card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
+        
+        clearUserFormData();
+        disableUserFormData();
+    }//GEN-LAST:event_cancel_add_user_buttonActionPerformed
+
+    private void submit_modify_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit_modify_user_buttonActionPerformed
+        // TODO Call database interface to modify employee
+        
+        //Change back to the standard buttons
+        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+        card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
+    }//GEN-LAST:event_submit_modify_user_buttonActionPerformed
+
+    private void cancel_modify_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_modify_user_buttonActionPerformed
+        String employee_id = (String)user_jtable.getValueAt(current_selected_row, EMPLOYEE_ID_COLUMN);
+        //TODO Requery database to fill form with true data
+        disableUserFormData();
+
+        //Change back to the standard buttons
+        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+        card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
+    }//GEN-LAST:event_cancel_modify_user_buttonActionPerformed
+
+    private void clearUserFormData() {
+        employee_id_textfield.setText(null);
+        first_name_textfield.setText(null);
+        last_name_textfield.setText(null);
+        address_textfield.setText(null);
+        ssn_textfield.setText(null);
+        wage_textfield.setText(null);
+        hours_textfield.setText(null);
+        password_textfield.setText(null);
+        admin_checkbox.setSelected(false);
+    }
+    
+    private void enableUserFormData()
+    {
+        employee_id_textfield.setEditable(true);
+        first_name_textfield.setEditable(true);
+        last_name_textfield.setEditable(true);
+        address_textfield.setEditable(true);
+        ssn_textfield.setEditable(true);
+        wage_textfield.setEditable(true);
+        hours_textfield.setEditable(true);
+        password_textfield.setEditable(true);
+        admin_checkbox.setEnabled(true);
+    }
+    
+    private void disableUserFormData()
+    {
+        employee_id_textfield.setEditable(false);
+        first_name_textfield.setEditable(false);
+        last_name_textfield.setEditable(false);
+        address_textfield.setEditable(false);
+        ssn_textfield.setEditable(false);
+        wage_textfield.setEditable(false);
+        hours_textfield.setEditable(false);
+        password_textfield.setEditable(false);
+        admin_checkbox.setEnabled(false);
+    }
+    
+    private void clearSelectedRow() {
+        //TODO Should I delete instead?
+    }
+
+    private final int EMPLOYEE_ID_COLUMN;
+    private int current_selected_row;
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_user_jbutton;
     private javax.swing.JLabel address_jlabel;
     private javax.swing.JTextField address_textfield;
     private javax.swing.JCheckBox admin_checkbox;
     private javax.swing.JPanel button_panel;
+    private javax.swing.JButton cancel_add_user_button;
+    private javax.swing.JButton cancel_modify_user_button;
     private javax.swing.JLabel company_name_label;
     private javax.swing.JButton delete_user_jbutton;
     private javax.swing.JLabel employee_id_jlabel;
@@ -526,7 +802,6 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private javax.swing.JLabel icon_jLabel;
     private javax.swing.JPanel icon_jpanel;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel last_name_jlabel;
     private javax.swing.JRadioButton last_name_jradiobutton;
     private javax.swing.JTextField last_name_textfield;
@@ -538,7 +813,6 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private javax.swing.JTabbedPane option_jtabbedpane;
     private javax.swing.JLabel password_jlabel;
     private javax.swing.JTextField password_textfield;
-    private javax.swing.JPanel product_table_jpanel;
     private javax.swing.JTextField search_employee_id_jtextfield;
     private javax.swing.JTextField search_first_name_jtextfield;
     private javax.swing.JButton search_jbutton;
@@ -546,7 +820,15 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private javax.swing.JTextField search_last_name_jtextfield;
     private javax.swing.JLabel ssn_jlabel;
     private javax.swing.JTextField ssn_textfield;
+    private javax.swing.JButton submit_add_user_button;
+    private javax.swing.JButton submit_modify_user_button;
+    private javax.swing.JPanel user_add_buttons;
+    private javax.swing.JPanel user_dynamic_button_panel;
     private javax.swing.JPanel user_jpanel;
+    private javax.swing.JTable user_jtable;
+    private javax.swing.JPanel user_modify_buttons;
+    private javax.swing.JPanel user_standard_buttons;
+    private javax.swing.JPanel user_table_jpanel;
     private javax.swing.JLabel wage_jlabel;
     private javax.swing.JTextField wage_textfield;
     // End of variables declaration//GEN-END:variables

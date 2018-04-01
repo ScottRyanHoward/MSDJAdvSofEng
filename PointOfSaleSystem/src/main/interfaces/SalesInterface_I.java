@@ -5,17 +5,15 @@
  */
 package main.interfaces;
 
-import main.structures.Employee;
+import main.structures.Sales;
 import java.util.ArrayList;
 /**
  *
  * @author Matt HP
  */
-public interface Employee_I
+public interface SalesInterface_I
 {
-    Employee getEmployee(String id);
-    void addEmployee(Employee new_employee);
-    void updateEmployee(Employee update_employee);
-    void deleteEmployee(String id);
-    ArrayList<Employee> getAllEmployees();    
+   ArrayList<Sales> getSales(String transaction_id);
+   ArrayList<Sales> getAllSales();
+   ArrayList<Sales> searchSales(String query);
 }
