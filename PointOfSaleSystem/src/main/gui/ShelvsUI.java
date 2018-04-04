@@ -55,6 +55,7 @@ public class ShelvsUI extends javax.swing.JFrame {
 
         shelvsPanel.setPreferredSize(new java.awt.Dimension(1878, 1038));
         shelvsPanel.setLayout(new java.awt.CardLayout());
+        shelvsPanel.add(loginPanel, "loginPanel");
         shelvsPanel.add(launcherMenuPanel, "launcherMenuPanel");
         shelvsPanel.add(inventoryManagementPanel, "inventoryManagementPanel");
         shelvsPanel.add(transactionsPanel, "transactionsPanel");
