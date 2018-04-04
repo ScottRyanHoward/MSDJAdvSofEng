@@ -6,7 +6,11 @@
 package main.gui.core;
 
 import java.awt.CardLayout;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import main.structures.Employee;
+import main.interfaces.Employee_I;
 
 /**
  *
@@ -17,9 +21,16 @@ public class UserManagementPanel extends javax.swing.JPanel {
     /**
      * Creates new form UserManagementPanel
      */
-    public UserManagementPanel() {
+    public UserManagementPanel(Employee_I employee_handler) {
         initComponents();
         this.EMPLOYEE_ID_COLUMN = 0;
+        this.EMPLOYEE_FIRST_NAME_COLUMN = 1;
+        this.EMPLOYEE_LAST_NAME_COLUMN = 2;
+        this.EMPLOYEE_ADDRESS_COLUMN = 3;
+        this.EMPLOYEE_WAGE_COLUMN = 4;
+        this.EMPLOYEE_HOURS_COLUMN = 5;
+        this.employee_handler = employee_handler;
+        showAllEmployees();
     }
 
     /**
@@ -31,6 +42,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        search_radio_button_group = new javax.swing.ButtonGroup();
         logo_jpanel = new javax.swing.JPanel();
         loco_icon_panel = new javax.swing.JPanel();
         logo_jlabel = new javax.swing.JLabel();
@@ -160,11 +172,6 @@ public class UserManagementPanel extends javax.swing.JPanel {
         employee_id_textfield.setEditable(false);
 
         first_name_textfield.setEditable(false);
-        first_name_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                first_name_textfieldActionPerformed(evt);
-            }
-        });
 
         address_jlabel.setText("Address :");
 
@@ -173,20 +180,10 @@ public class UserManagementPanel extends javax.swing.JPanel {
         ssn_jlabel.setText("SSN :");
 
         ssn_textfield.setEditable(false);
-        ssn_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ssn_textfieldActionPerformed(evt);
-            }
-        });
 
         wage_jlabel.setText("Wage :");
 
         wage_textfield.setEditable(false);
-        wage_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                wage_textfieldActionPerformed(evt);
-            }
-        });
 
         last_name_jlabel.setText("Last Name :");
 
@@ -414,38 +411,15 @@ public class UserManagementPanel extends javax.swing.JPanel {
 
         option_jtabbedpane.addTab("User", null, user_jpanel, "");
 
+        search_radio_button_group.add(first_name_jradiobutton);
+        first_name_jradiobutton.setSelected(true);
         first_name_jradiobutton.setText("First Name :");
-        first_name_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                first_name_jradiobuttonActionPerformed(evt);
-            }
-        });
 
+        search_radio_button_group.add(last_name_jradiobutton);
         last_name_jradiobutton.setText("Last Name :");
-        last_name_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                last_name_jradiobuttonActionPerformed(evt);
-            }
-        });
 
+        search_radio_button_group.add(employee_id_jradiobutton);
         employee_id_jradiobutton.setText("Employee ID :");
-        employee_id_jradiobutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                employee_id_jradiobuttonActionPerformed(evt);
-            }
-        });
-
-        search_last_name_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                search_last_name_jtextfieldActionPerformed(evt);
-            }
-        });
-
-        search_employee_id_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                search_employee_id_jtextfieldActionPerformed(evt);
-            }
-        });
 
         search_jbutton.setText("Search");
         search_jbutton.addActionListener(new java.awt.event.ActionListener() {
@@ -461,18 +435,14 @@ public class UserManagementPanel extends javax.swing.JPanel {
             .addGroup(search_jpanelLayout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(search_jpanelLayout.createSequentialGroup()
-                        .addComponent(first_name_jradiobutton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
-                        .addComponent(search_first_name_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 121, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(search_jpanelLayout.createSequentialGroup()
-                        .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(last_name_jradiobutton)
-                            .addComponent(employee_id_jradiobutton))
-                        .addGap(54, 54, 54)
-                        .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(search_last_name_jtextfield)
-                            .addComponent(search_employee_id_jtextfield))))
+                    .addComponent(last_name_jradiobutton)
+                    .addComponent(employee_id_jradiobutton)
+                    .addComponent(first_name_jradiobutton))
+                .addGap(54, 54, 54)
+                .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(search_first_name_jtextfield)
+                    .addComponent(search_last_name_jtextfield, javax.swing.GroupLayout.DEFAULT_SIZE, 134, Short.MAX_VALUE)
+                    .addComponent(search_employee_id_jtextfield))
                 .addGap(74, 74, 74))
             .addGroup(search_jpanelLayout.createSequentialGroup()
                 .addGap(136, 136, 136)
@@ -531,15 +501,20 @@ public class UserManagementPanel extends javax.swing.JPanel {
 
         user_jtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Employee Id", "First Name", "Last Name", "Address", "Wage", "Hours"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         user_jtable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 user_jtableMouseClicked(evt);
@@ -590,18 +565,6 @@ public class UserManagementPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void first_name_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_textfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_textfieldActionPerformed
-
-    private void ssn_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ssn_textfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ssn_textfieldActionPerformed
-
-    private void wage_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_wage_textfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_wage_textfieldActionPerformed
-
     private void add_user_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_user_jbuttonActionPerformed
         clearUserFormData();
         enableUserFormData();
@@ -612,42 +575,46 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_add_user_jbuttonActionPerformed
 
     private void delete_user_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_user_jbuttonActionPerformed
-        int user_selection;
-        user_selection = 
+        int dialog_selection;
+        dialog_selection = 
                 JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this user? (This cannot be undone)", "Delete User", JOptionPane. YES_NO_OPTION);
         
-        if(0 == user_selection)
+        if(0 == dialog_selection)
         {
-            //TODO DELETE USER FROM DATABASE
+            String employee_id = (String)user_jtable.getValueAt(current_selected_row, EMPLOYEE_ID_COLUMN);
+            employee_handler.deleteEmployee(employee_id);
             clearUserFormData();
-            clearSelectedRow();
+            deleteSelectedRow();
         }
         
         
     }//GEN-LAST:event_delete_user_jbuttonActionPerformed
 
-    private void first_name_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_first_name_jradiobuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_first_name_jradiobuttonActionPerformed
-
-    private void last_name_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_last_name_jradiobuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_last_name_jradiobuttonActionPerformed
-
-    private void employee_id_jradiobuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_employee_id_jradiobuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_employee_id_jradiobuttonActionPerformed
-
-    private void search_last_name_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_last_name_jtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_last_name_jtextfieldActionPerformed
-
-    private void search_employee_id_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_employee_id_jtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_search_employee_id_jtextfieldActionPerformed
-
     private void search_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_jbuttonActionPerformed
-        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) user_jtable.getModel();
+        //First clear all rows
+        model.setRowCount(0);
+        
+        ArrayList<Employee> found_employees = new ArrayList<>();
+        
+        if(first_name_jradiobutton.isSelected())
+        {
+            found_employees = employee_handler.searchEmployees("first_name", search_first_name_jtextfield.getText());
+        }
+        else if(last_name_jradiobutton.isSelected())
+        {
+            found_employees = employee_handler.searchEmployees("last_name", search_last_name_jtextfield.getText());
+        }
+        else if(employee_id_jradiobutton.isSelected())
+        {
+            found_employees = employee_handler.searchEmployees("employee_id", search_employee_id_jtextfield.getText());
+        }
+        
+        for (Employee employee : found_employees)
+        {
+            createEmployeeRow(employee);
+        }
+        
     }//GEN-LAST:event_search_jbuttonActionPerformed
 
     private void menu_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_jbuttonActionPerformed
@@ -666,8 +633,9 @@ public class UserManagementPanel extends javax.swing.JPanel {
 
             if(employee_id != null)
             {
-                //TODO Get Employee data struct from DB interface and then set to display
-                //TODO Also either disable writabliity of matrix, or check if valid, since user can edit table right now
+                //Set the form data based on selected employee
+                setEmployeeFormData(employee_id);
+                
                 modify_user_jbutton.setEnabled(true);
                 delete_user_jbutton.setEnabled(true);
             }
@@ -681,12 +649,6 @@ public class UserManagementPanel extends javax.swing.JPanel {
             //Make sure that the standard buttons are shown
             CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
             card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
-        
-            //TODO Put these into a set employee data function
-            //employee_id_textfield.setText((String)users_jtable.getValueAt(selected_row, EMPLOYEE_ID_COLUMN));
-            //first_name_textfield.setText((String)users_jtable.getValueAt(selected_row, FIRST_NAME_COLUMN));
-            //last_name_textfield.setText((String)users_jtable.getValueAt(selected_row, LAST_NAME_COLUMN));
-
         }
     }//GEN-LAST:event_user_jtableMouseClicked
 
@@ -700,15 +662,68 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_modify_user_jbuttonActionPerformed
 
     private void submit_add_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit_add_user_buttonActionPerformed
-        // TODO Call database interface to create employee
+        if(isInputDataValid())
+        {
+            Employee new_employee = new Employee();
+            new_employee.setEmployeeId(employee_id_textfield.getText());
+            new_employee.setFirstName(first_name_textfield.getText());
+            new_employee.setLastName(last_name_textfield.getText());
+            new_employee.setAddress(address_textfield.getText());
+            new_employee.setSsn(Integer.parseInt(ssn_textfield.getText()));
+            new_employee.setWage(Double.parseDouble(wage_textfield.getText()));
+            new_employee.setHours(Double.parseDouble(hours_textfield.getText()));
+            new_employee.setAccountPassword(password_textfield.getText());
+            new_employee.setIsAdmin(admin_checkbox.isSelected());
+
+            //Create in database
+            employee_handler.addEmployee(new_employee);
+            
+            //Add row to table
+            createEmployeeRow(new_employee);
+            
+            //Change back to the standard buttons
+            CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+            card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
         
-        //Change back to the standard buttons
-        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
-        card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
-        
-        disableUserFormData();
+            disableUserFormData();
+        }
     }//GEN-LAST:event_submit_add_user_buttonActionPerformed
 
+    private boolean isInputDataValid()
+    {
+        if(employee_id_textfield.getText().isEmpty())
+        {
+            JOptionPane.showMessageDialog(this, "Invalid Employee ID entered", "ERROR", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        
+        try {
+            Integer.parseInt(ssn_textfield.getText());
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid SSN entered", "ERROR", JOptionPane.ERROR_MESSAGE); 
+            return false;
+        }
+        
+        try {
+            Double.parseDouble(wage_textfield.getText());
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid Wage entered", "ERROR", JOptionPane.ERROR_MESSAGE); 
+            return false;
+        }
+        
+        try {
+            Double.parseDouble(hours_textfield.getText());
+        }
+        catch(Exception e) {
+            JOptionPane.showMessageDialog(this, "Invalid Hours entered", "ERROR", JOptionPane.ERROR_MESSAGE); 
+            return false;
+        }
+        
+        return true;
+    }
+    
     private void cancel_add_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_add_user_buttonActionPerformed
         //Change back to the standard buttons
         CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
@@ -719,16 +734,37 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_cancel_add_user_buttonActionPerformed
 
     private void submit_modify_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submit_modify_user_buttonActionPerformed
-        // TODO Call database interface to modify employee
+        if(isInputDataValid())
+        {
+            Employee modified_employee = new Employee();
+            modified_employee.setEmployeeId(employee_id_textfield.getText());
+            modified_employee.setFirstName(first_name_textfield.getText());
+            modified_employee.setLastName(last_name_textfield.getText());
+            modified_employee.setAddress(address_textfield.getText());
+            modified_employee.setSsn(Integer.parseInt(ssn_textfield.getText()));
+            modified_employee.setWage(Double.parseDouble(wage_textfield.getText()));
+            modified_employee.setHours(Double.parseDouble(hours_textfield.getText()));
+            modified_employee.setAccountPassword(password_textfield.getText());
+            modified_employee.setIsAdmin(admin_checkbox.isSelected());
+
+            //Modify in database
+            employee_handler.updateEmployee(modified_employee);
+            
+            modifyEmployeeRow(modified_employee);
+            
+            //Change back to the standard buttons
+            CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
+            card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
         
-        //Change back to the standard buttons
-        CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
-        card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
+            disableUserFormData();
+        }
     }//GEN-LAST:event_submit_modify_user_buttonActionPerformed
 
     private void cancel_modify_user_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_modify_user_buttonActionPerformed
         String employee_id = (String)user_jtable.getValueAt(current_selected_row, EMPLOYEE_ID_COLUMN);
-        //TODO Requery database to fill form with true data
+        //Set back to original data
+        setEmployeeFormData(employee_id);
+        
         disableUserFormData();
 
         //Change back to the standard buttons
@@ -736,6 +772,20 @@ public class UserManagementPanel extends javax.swing.JPanel {
         card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
     }//GEN-LAST:event_cancel_modify_user_buttonActionPerformed
 
+    private void setEmployeeFormData(String employee_id)
+    {
+        Employee employee_to_set = employee_handler.getEmployee(employee_id);
+        employee_id_textfield.setText(employee_to_set.getEmployeeId());
+        first_name_textfield.setText(employee_to_set.getFirstName());
+        last_name_textfield.setText(employee_to_set.getLastName());
+        address_textfield.setText(employee_to_set.getAddress());
+        ssn_textfield.setText("" + employee_to_set.getSsn());
+        wage_textfield.setText("" + employee_to_set.getWage());
+        hours_textfield.setText("" + employee_to_set.getHours());
+        password_textfield.setText(employee_to_set.getAccountPassword());
+        admin_checkbox.setSelected(employee_to_set.getIsAdmin());
+    }
+    
     private void clearUserFormData() {
         employee_id_textfield.setText(null);
         first_name_textfield.setText(null);
@@ -774,12 +824,52 @@ public class UserManagementPanel extends javax.swing.JPanel {
         admin_checkbox.setEnabled(false);
     }
     
-    private void clearSelectedRow() {
-        //TODO Should I delete instead?
+    private void deleteSelectedRow() {
+        DefaultTableModel model = (DefaultTableModel) user_jtable.getModel();
+        model.removeRow(current_selected_row);
+    }
+    
+    private void showAllEmployees() {
+        ArrayList<Employee> employee_list = employee_handler.getAllEmployees();
+        
+        for (Employee employee : employee_list)
+        {
+            createEmployeeRow(employee);
+        }
+    }
+    
+    private void createEmployeeRow(Employee employee) {
+        DefaultTableModel model = (DefaultTableModel) user_jtable.getModel();    
+        
+        Object[] row =
+            {
+                employee.getEmployeeId(),
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getAddress(),
+                employee.getWage(),
+                employee.getHours()
+            };
+        model.addRow(row);
+    }
+    
+    private void modifyEmployeeRow(Employee employee) {
+        user_jtable.setValueAt(employee.getEmployeeId(), current_selected_row, EMPLOYEE_ID_COLUMN);
+        user_jtable.setValueAt(employee.getFirstName(), current_selected_row, EMPLOYEE_FIRST_NAME_COLUMN);
+        user_jtable.setValueAt(employee.getLastName(), current_selected_row, EMPLOYEE_LAST_NAME_COLUMN);
+        user_jtable.setValueAt(employee.getAddress(), current_selected_row, EMPLOYEE_ADDRESS_COLUMN);
+        user_jtable.setValueAt(employee.getWage(), current_selected_row, EMPLOYEE_WAGE_COLUMN);
+        user_jtable.setValueAt(employee.getHours(), current_selected_row, EMPLOYEE_HOURS_COLUMN);
     }
 
     private final int EMPLOYEE_ID_COLUMN;
+    private final int EMPLOYEE_FIRST_NAME_COLUMN;
+    private final int EMPLOYEE_LAST_NAME_COLUMN;
+    private final int EMPLOYEE_ADDRESS_COLUMN;
+    private final int EMPLOYEE_WAGE_COLUMN;
+    private final int EMPLOYEE_HOURS_COLUMN;
     private int current_selected_row;
+    Employee_I employee_handler;
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_user_jbutton;
@@ -818,6 +908,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private javax.swing.JButton search_jbutton;
     private javax.swing.JPanel search_jpanel;
     private javax.swing.JTextField search_last_name_jtextfield;
+    private javax.swing.ButtonGroup search_radio_button_group;
     private javax.swing.JLabel ssn_jlabel;
     private javax.swing.JTextField ssn_textfield;
     private javax.swing.JButton submit_add_user_button;

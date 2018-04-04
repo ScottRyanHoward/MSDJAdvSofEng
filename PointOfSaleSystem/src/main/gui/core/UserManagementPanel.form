@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+  <NonVisualComponents>
+    <Component class="javax.swing.ButtonGroup" name="search_radio_button_group">
+    </Component>
+  </NonVisualComponents>
   <Properties>
     <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
       <Dimension value="[1878, 1038]"/>
@@ -305,9 +309,6 @@
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="first_name_textfieldActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="address_jlabel">
               <Properties>
@@ -328,9 +329,6 @@
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ssn_textfieldActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="wage_jlabel">
               <Properties>
@@ -341,9 +339,6 @@
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="wage_textfieldActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="last_name_jlabel">
               <Properties>
@@ -576,22 +571,15 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="17" pref="17" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="0" attributes="0">
-                              <Component id="first_name_jradiobutton" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace pref="77" max="32767" attributes="0"/>
-                              <Component id="search_first_name_jtextfield" min="-2" pref="121" max="-2" attributes="0"/>
-                          </Group>
-                          <Group type="102" alignment="0" attributes="0">
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="last_name_jradiobutton" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="employee_id_jradiobutton" alignment="0" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="search_last_name_jtextfield" max="32767" attributes="0"/>
-                                  <Component id="search_employee_id_jtextfield" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
+                          <Component id="last_name_jradiobutton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="employee_id_jradiobutton" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="first_name_jradiobutton" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="search_first_name_jtextfield" max="32767" attributes="0"/>
+                          <Component id="search_last_name_jtextfield" pref="134" max="32767" attributes="0"/>
+                          <Component id="search_employee_id_jtextfield" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
                   </Group>
@@ -630,39 +618,34 @@
           <SubComponents>
             <Component class="javax.swing.JRadioButton" name="first_name_jradiobutton">
               <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="search_radio_button_group"/>
+                </Property>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="First Name :"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="first_name_jradiobuttonActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="last_name_jradiobutton">
               <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="search_radio_button_group"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Last Name :"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="last_name_jradiobuttonActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JRadioButton" name="employee_id_jradiobutton">
               <Properties>
+                <Property name="buttonGroup" type="javax.swing.ButtonGroup" editor="org.netbeans.modules.form.RADComponent$ButtonGroupPropertyEditor">
+                  <ComponentRef name="search_radio_button_group"/>
+                </Property>
                 <Property name="text" type="java.lang.String" value="Employee ID :"/>
               </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="employee_id_jradiobuttonActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="search_first_name_jtextfield">
             </Component>
             <Component class="javax.swing.JTextField" name="search_last_name_jtextfield">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="search_last_name_jtextfieldActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="search_employee_id_jtextfield">
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="search_employee_id_jtextfieldActionPerformed"/>
-              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="search_jbutton">
               <Properties>
@@ -756,15 +739,27 @@
             <Component class="javax.swing.JTable" name="user_jtable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="4" rowCount="4">
-                    <Column editable="true" title="Title 1" type="java.lang.Object"/>
-                    <Column editable="true" title="Title 2" type="java.lang.Object"/>
-                    <Column editable="true" title="Title 3" type="java.lang.Object"/>
-                    <Column editable="true" title="Title 4" type="java.lang.Object"/>
+                  <Table columnCount="6" rowCount="0">
+                    <Column editable="false" title="Employee Id" type="java.lang.Object"/>
+                    <Column editable="false" title="First Name" type="java.lang.Object"/>
+                    <Column editable="false" title="Last Name" type="java.lang.Object"/>
+                    <Column editable="false" title="Address" type="java.lang.Object"/>
+                    <Column editable="false" title="Wage" type="java.lang.Object"/>
+                    <Column editable="false" title="Hours" type="java.lang.Object"/>
                   </Table>
                 </Property>
                 <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                   <TableColumnModel selectionModel="0">
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
+                    <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                      <Title/>
+                      <Editor/>
+                      <Renderer/>
+                    </Column>
                     <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                       <Title/>
                       <Editor/>
