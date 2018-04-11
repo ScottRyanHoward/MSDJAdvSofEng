@@ -33,6 +33,11 @@ public class ShelvsUI extends javax.swing.JFrame {
         admin_token = in_admin_token;
         initComponents();
     }
+    
+    public void setAdmin(boolean is_admin)
+    {
+       admin_token = is_admin;
+    }
 
     @SuppressWarnings("unchecked")                      
     private void initComponents()
@@ -40,10 +45,10 @@ public class ShelvsUI extends javax.swing.JFrame {
 
         shelvsPanel = new javax.swing.JPanel();
         launcherMenuPanel = new main.gui.core.LauncherMenuPanel();
-        if(admin_token)
-           inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(admin_token,inv_manager);
+        if(true)
+           inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(true,inv_manager);
         else
-          inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(admin_token,inv_non_manager);
+          inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(admin_token,inv_manager);
                     
         transactionsPanel = new main.gui.core.TransactionsPanel();
         salesMetricsPanel = new main.gui.core.SalesMetricsPanel();
