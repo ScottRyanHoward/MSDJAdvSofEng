@@ -6,6 +6,8 @@
 package main.gui.core;
 
 import java.awt.CardLayout;
+import main.interfaces.Login_I;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -13,11 +15,14 @@ import java.awt.CardLayout;
  */
 public class LoginPanel extends javax.swing.JPanel {
 
+    Login_I login_handler;
+    
     /**
      * Creates new form LoginPanel
      */
-    public LoginPanel() {
+    public LoginPanel(Login_I login_handler) {
         initComponents();
+        this.login_handler = login_handler;
     }
 
     /**
@@ -174,8 +179,19 @@ public class LoginPanel extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        CardLayout card = (CardLayout)this.getParent().getLayout();
-        card.show(this.getParent(), "launcherMenuPanel");
+        
+        String id = userIdField.getText();
+        String password = String.valueOf(passwordField.getPassword());
+        
+        if(login_handler.checkLogin(id, password))
+        {
+            CardLayout card = (CardLayout)this.getParent().getLayout();
+            card.show(this.getParent(), "launcherMenuPanel");
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Invalid ID and Password combination", "ERROR", JOptionPane.ERROR_MESSAGE); 
+        }
     }//GEN-LAST:event_loginButtonActionPerformed
 
 

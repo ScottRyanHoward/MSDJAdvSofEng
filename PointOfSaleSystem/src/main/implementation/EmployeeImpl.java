@@ -23,6 +23,8 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
 {
     private Connection connection;
     private DatabaseConnection_I db_connection;
+    private final String secret_passcode = "Spring2018SEClassSHELVS";
+    
     public EmployeeImpl()
     {
       db_connection = new DatabaseConnectionImpl();
@@ -65,7 +67,7 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
                     employee.setWage(Double.parseDouble(result.getString("wage")));
                     employee.setSsn(Integer.parseInt(result.getString("ssn")));
                     employee.setAccountPassword(result.getString("account_password"));
-                    employee.setIsAdmin(Boolean.parseBoolean(result.getString("is_admin")));
+                    employee.setIsAdmin(result.getBoolean("is_admin"));
                 }
             }
         }
@@ -101,7 +103,7 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
                     employee.setWage(Double.parseDouble(result.getString("wage")));
                     employee.setSsn(Integer.parseInt(result.getString("ssn")));
                     employee.setAccountPassword(result.getString("account_password"));
-                    employee.setIsAdmin(Boolean.parseBoolean(result.getString("is_admin")));
+                    employee.setIsAdmin(result.getBoolean("is_admin"));
                     employee_list.add(employee);
                 }
             }
@@ -117,9 +119,10 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
     public void addEmployee(Employee new_employee)
     {
        String query = "INSERT INTO employee (employee_id, first_name, last_name,address,ssn,account_password,wage,hours,is_admin) " +
-       "VALUES (" + new_employee.getEmployeeId() + "," + new_employee.getFirstName() + " ," +
-        new_employee.getLastName() + " , " + new_employee.getAddress() + "," + 
-        new_employee.getSsn() + "," + new_employee.getAccountPassword() + 
+       "VALUES ('" + new_employee.getEmployeeId() + "','" + new_employee.getFirstName() + "' ,'" +
+        new_employee.getLastName() + "' , '" + new_employee.getAddress() + "'," + 
+        new_employee.getSsn() + 
+        ",AES_ENCRYPT('" + new_employee.getAccountPassword() + "', UNHEX(SHA2('" + secret_passcode + "',512)))," + //Password is encrypted using the hashed passcode as the key
         new_employee.getWage() + " , " + new_employee.getHours() + "," + 
         new_employee.getIsAdmin() + ")";
        
@@ -139,7 +142,7 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
         "wage = " +  update_employee.getWage() + "," +
         "hours = " +  update_employee.getHours() + "," +
         "is_admin = " +  update_employee.getIsAdmin() + 
-        " WHERE employee_id = '" + update_employee + "'";
+        " WHERE employee_id = '" + update_employee.getEmployeeId() + "'";
         executeSqlStatement(query);
     }
 
@@ -176,7 +179,7 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
                     employee.setWage(Double.parseDouble(result.getString("wage")));
                     employee.setSsn(Integer.parseInt(result.getString("ssn")));
                     employee.setAccountPassword(result.getString("account_password"));
-                    employee.setIsAdmin(Boolean.parseBoolean(result.getString("is_admin")));
+                    employee.setIsAdmin(result.getBoolean("is_admin"));
                     employee_list.add(employee);
                 }
             }
@@ -201,19 +204,19 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
         {
           connection = db_connection.connectToDatabase();
           Statement statement = connection.createStatement();
-          String command = "SELECT * FROM employee where employee_id = '" +employee_id + 
-                  "'AND account_password = '" + password + "'";
+          String command = "SELECT * FROM employee "  + "WHERE employee_id = '" + employee_id + "' " +
+          "AND AES_DECRYPT(account_password, UNHEX(SHA2('" + secret_passcode + "',512))) = '" + password + "'";
                   
           ResultSet result = statement.executeQuery(command);
             
-            if (null != result)
+            if (result.next()) //A record has been found
             {
                return true;
             }
         }
         catch (SQLException e)
         {
-            System.out.println("getProduct " + e);
+            System.out.println("Check Login " + e);
         } 
        return false;
     }
