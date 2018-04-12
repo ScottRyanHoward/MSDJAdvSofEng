@@ -4,6 +4,9 @@ import java.awt.CardLayout;
 import main.implementation.InventoryImpl;
 import main.interfaces.InventoryInterfaceForManagers_I;
 import main.interfaces.InventoryInterface_I;
+import main.implementation.EmployeeImpl;
+import main.interfaces.Employee_I;
+import main.interfaces.Login_I;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,6 +25,7 @@ public class ShelvsUI extends javax.swing.JFrame {
     
     InventoryInterfaceForManagers_I inv_manager = new InventoryImpl();
     InventoryInterface_I inv_non_manager = new InventoryImpl();
+    Employee_I employee_handler = new EmployeeImpl();
     
     /**
      * Creates new form LoginGUI
@@ -30,6 +34,11 @@ public class ShelvsUI extends javax.swing.JFrame {
         admin_token = in_admin_token;
         initComponents();
     }
+    
+    public void setAdmin(boolean is_admin)
+    {
+       admin_token = is_admin;
+    }
 
     @SuppressWarnings("unchecked")                      
     private void initComponents()
@@ -37,15 +46,15 @@ public class ShelvsUI extends javax.swing.JFrame {
 
         shelvsPanel = new javax.swing.JPanel();
         launcherMenuPanel = new main.gui.core.LauncherMenuPanel();
-        if(admin_token)
-           inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(admin_token,inv_manager);
+        if(true)
+           inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(true,inv_manager);
         else
-          inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(admin_token,inv_non_manager);
+          inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(admin_token,inv_manager);
                     
         transactionsPanel = new main.gui.core.TransactionsPanel();
         salesMetricsPanel = new main.gui.core.SalesMetricsPanel();
-        userManagementPanel = new main.gui.core.UserManagementPanel();
-        loginPanel = new main.gui.core.LoginPanel();
+        userManagementPanel = new main.gui.core.UserManagementPanel(employee_handler);
+        loginPanel = new main.gui.core.LoginPanel( (Login_I)employee_handler );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);

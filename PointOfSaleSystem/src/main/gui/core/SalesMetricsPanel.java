@@ -27,7 +27,8 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -100,8 +101,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jRadioButton1.setText("TODAY");
-        jRadioButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jRadioButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jRadioButton1ActionPerformed(evt);
             }
         });
@@ -140,7 +143,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
                                 .addComponent(jLabel6)
                                 .addGap(27, 27, 27)
                                 .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(748, Short.MAX_VALUE))
+                .addContainerGap(790, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -168,7 +171,8 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jTabbedPane2.addTab("Reports", jPanel1);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null},
@@ -270,7 +274,8 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
                 {null, null, null, null, null, null},
                 {null, null, null, null, null, null}
             },
-            new String [] {
+            new String []
+            {
                 "Date", "Time", "Product Id", "Qty", "Price", "Transaction ID"
             }
         ));
@@ -618,8 +623,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
 
         jLabel8.setText("Number of Items Sold:");
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jTextField6.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jTextField6ActionPerformed(evt);
             }
         });
@@ -627,8 +634,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel9.setText("Total Sales:");
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jTextField7.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jTextField7ActionPerformed(evt);
             }
         });
@@ -674,8 +683,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         jButton3.setText("Menu Launcher");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jButton3.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jButton3ActionPerformed(evt);
             }
         });
