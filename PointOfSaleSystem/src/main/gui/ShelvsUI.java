@@ -6,6 +6,7 @@ import main.interfaces.InventoryInterfaceForManagers_I;
 import main.interfaces.InventoryInterface_I;
 import main.implementation.EmployeeImpl;
 import main.interfaces.Employee_I;
+import main.interfaces.Login_I;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -53,7 +54,7 @@ public class ShelvsUI extends javax.swing.JFrame {
         transactionsPanel = new main.gui.core.TransactionsPanel();
         salesMetricsPanel = new main.gui.core.SalesMetricsPanel();
         userManagementPanel = new main.gui.core.UserManagementPanel(employee_handler);
-        loginPanel = new main.gui.core.LoginPanel();
+        loginPanel = new main.gui.core.LoginPanel( (Login_I)employee_handler );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);

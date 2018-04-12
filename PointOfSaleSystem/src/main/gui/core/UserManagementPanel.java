@@ -66,7 +66,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
         hours_jlabel = new javax.swing.JLabel();
         hours_textfield = new javax.swing.JTextField();
         password_jlabel = new javax.swing.JLabel();
-        password_textfield = new javax.swing.JTextField();
+        password_textfield = new javax.swing.JPasswordField();
         admin_checkbox = new javax.swing.JCheckBox();
         user_dynamic_button_panel = new javax.swing.JPanel();
         user_standard_buttons = new javax.swing.JPanel();
@@ -568,6 +568,9 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private void add_user_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_user_jbuttonActionPerformed
         clearUserFormData();
         enableUserFormData();
+        //Employee ID can only be edited on adding a user, not modifying
+        employee_id_textfield.setEditable(true);
+
         
         //Change the buttons to the new options for adding a user
         CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
@@ -800,7 +803,6 @@ public class UserManagementPanel extends javax.swing.JPanel {
     
     private void enableUserFormData()
     {
-        employee_id_textfield.setEditable(true);
         first_name_textfield.setEditable(true);
         last_name_textfield.setEditable(true);
         address_textfield.setEditable(true);
