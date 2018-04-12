@@ -138,7 +138,7 @@ public class EmployeeImpl implements main.interfaces.Employee_I,
         "last_name = '" + update_employee.getLastName() + "'," +
         "address = '" + update_employee.getAddress() + "'," +
         "ssn = " + update_employee.getSsn()+ "," +
-        "account_password = '" +  update_employee.getAccountPassword() + "'," +
+        "account_password = " +  "AES_ENCRYPT('" + update_employee.getAccountPassword() + "', UNHEX(SHA2('" + secret_passcode + "',512)))," + //Password is encrypted using the hashed passcode as the key
         "wage = " +  update_employee.getWage() + "," +
         "hours = " +  update_employee.getHours() + "," +
         "is_admin = " +  update_employee.getIsAdmin() + 

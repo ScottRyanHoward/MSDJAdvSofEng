@@ -96,10 +96,6 @@ public class LoginPanel extends javax.swing.JPanel {
 
         passwordLabel.setText("Password");
 
-        userIdField.setText("jTextField2");
-
-        passwordField.setText("jPasswordField1");
-
         loginButton.setText("Log In");
         loginButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
