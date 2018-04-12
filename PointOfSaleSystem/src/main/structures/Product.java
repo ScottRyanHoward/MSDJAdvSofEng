@@ -7,41 +7,48 @@ package main.structures;
 
 public class Product
 {
-    public enum Category
+    public String category_array[] =
     {
-        SHORTSLEEVE, LONGSLEEVE, BEANIE, HAT,
-        CREWNECK, HOODIE
-    }
+        "SHORTSLEEVE", "LONGSLEEVE", "BEANIE", "HAT",
+        "CREWNECK", "HOODIE", "PANTS"
+    };
+    
+    public String size_array[] =
+    {
+        "XSMALL", "SMALL", "MEDIUM", "LARGE", "XLARGE",
+        "M28","M29","M30","M31","M32","M33","M34","M36","M38","M40",
+        "W00","W0","W2","W4","W6","W8","W10","W12","W14"
+    };
     
     private String product_id;
     private String product_name;
     private String description;
-    private Category category;
+    private String category;
+    private String size;
     private double price;
     private int quantity;
 
-    public Product() 
-    {
-        product_id = "";
-        product_name = "";
-        description = "";
-        category = Category.SHORTSLEEVE;
-        price = 0.00;
-        quantity = 0;
-    }
-
     /**
+     * 
      * @return the product_id
      */
-    public String getProduct_id()
+    public String getProductId()
     {
         return product_id;
+    }
+  
+        /**
+     * @param product_id the product id to set
+     */
+    public void setProductId(String product_id)
+    {
+        this.product_id = product_id;
     }
 
     /**
      * @return the product_name
      */
-    public String getProduct_name()
+    public String getProductName()
     {
         return product_name;
     }
@@ -49,7 +56,7 @@ public class Product
     /**
      * @param product_name the product_name to set
      */
-    public void setProduct_name(String product_name)
+    public void setProductName(String product_name)
     {
         this.product_name = product_name;
     }
@@ -73,7 +80,7 @@ public class Product
     /**
      * @return the category
      */
-    public Category getCategory()
+    public String getCategory()
     {
         return category;
     }
@@ -81,7 +88,7 @@ public class Product
     /**
      * @param category the category to set
      */
-    public void setCategory(Category category)
+    public void setCategory(String category)
     {
         this.category = category;
     }
@@ -116,5 +123,21 @@ public class Product
     public void setQuantity(int quantity)
     {
         this.quantity = quantity;
+    }
+    
+        /**
+     * @return the quantity
+     */
+    public String getSize()
+    {
+        return size;
+    }
+
+    /**
+     * @param size the quantity to set
+     */
+    public void setSize(String size)
+    {
+        this.size = size;
     }
 }
