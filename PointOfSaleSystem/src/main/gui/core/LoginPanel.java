@@ -183,6 +183,9 @@ public class LoginPanel extends javax.swing.JPanel {
         {
             CardLayout card = (CardLayout)this.getParent().getLayout();
             card.show(this.getParent(), "launcherMenuPanel");
+            //Clear so when user logs out, there isn't leftover information
+            userIdField.setText(null);
+            passwordField.setText(null);
         }
         else
         {
