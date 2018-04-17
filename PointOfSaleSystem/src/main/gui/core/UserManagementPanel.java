@@ -87,6 +87,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
         search_last_name_jtextfield = new javax.swing.JTextField();
         search_employee_id_jtextfield = new javax.swing.JTextField();
         search_jbutton = new javax.swing.JButton();
+        clear_jbutton = new javax.swing.JButton();
         button_panel = new javax.swing.JPanel();
         menu_jbutton = new javax.swing.JButton();
         user_table_jpanel = new javax.swing.JPanel();
@@ -428,6 +429,13 @@ public class UserManagementPanel extends javax.swing.JPanel {
             }
         });
 
+        clear_jbutton.setText("Clear");
+        clear_jbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clear_jbuttonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout search_jpanelLayout = new javax.swing.GroupLayout(search_jpanel);
         search_jpanel.setLayout(search_jpanelLayout);
         search_jpanelLayout.setHorizontalGroup(
@@ -445,8 +453,10 @@ public class UserManagementPanel extends javax.swing.JPanel {
                     .addComponent(search_employee_id_jtextfield))
                 .addGap(74, 74, 74))
             .addGroup(search_jpanelLayout.createSequentialGroup()
-                .addGap(136, 136, 136)
+                .addGap(97, 97, 97)
                 .addComponent(search_jbutton)
+                .addGap(41, 41, 41)
+                .addComponent(clear_jbutton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         search_jpanelLayout.setVerticalGroup(
@@ -465,8 +475,10 @@ public class UserManagementPanel extends javax.swing.JPanel {
                     .addComponent(search_employee_id_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(employee_id_jradiobutton))
                 .addGap(39, 39, 39)
-                .addComponent(search_jbutton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(search_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(search_jbutton)
+                    .addComponent(clear_jbutton))
+                .addContainerGap(365, Short.MAX_VALUE))
         );
 
         option_jtabbedpane.addTab("Search", null, search_jpanel, "");
@@ -626,33 +638,29 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_menu_jbuttonActionPerformed
 
     private void user_jtableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_user_jtableMouseClicked
-        int new_selected_row = user_jtable.getSelectedRow();
+        current_selected_row = user_jtable.getSelectedRow();
         
-        //If a the user selected a different row
-        if(new_selected_row != current_selected_row) {
-            
-            current_selected_row = new_selected_row;
-            String employee_id = (String)user_jtable.getValueAt(current_selected_row, EMPLOYEE_ID_COLUMN);
+        String employee_id = (String)user_jtable.getValueAt(current_selected_row, EMPLOYEE_ID_COLUMN);
+        
 
-            if(employee_id != null)
-            {
-                //Set the form data based on selected employee
-                setEmployeeFormData(employee_id);
+        if(employee_id != null)
+        {
+            //Set the form data based on selected employee
+            setEmployeeFormData(employee_id);
                 
-                modify_user_jbutton.setEnabled(true);
-                delete_user_jbutton.setEnabled(true);
-            }
-            else
-            {
-                modify_user_jbutton.setEnabled(false);
-                delete_user_jbutton.setEnabled(false);
-            }
+            modify_user_jbutton.setEnabled(true);
+            delete_user_jbutton.setEnabled(true);
+        }
+        else
+        {
+            modify_user_jbutton.setEnabled(false);
+            delete_user_jbutton.setEnabled(false);
+        }
             
             disableUserFormData();
             //Make sure that the standard buttons are shown
             CardLayout card = (CardLayout)user_dynamic_button_panel.getLayout();
             card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
-        }
     }//GEN-LAST:event_user_jtableMouseClicked
 
     private void modify_user_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modify_user_jbuttonActionPerformed
@@ -775,6 +783,10 @@ public class UserManagementPanel extends javax.swing.JPanel {
         card.show(user_dynamic_button_panel, "userStandardButtonsPanel");
     }//GEN-LAST:event_cancel_modify_user_buttonActionPerformed
 
+    private void clear_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clear_jbuttonActionPerformed
+        showAllEmployees();
+    }//GEN-LAST:event_clear_jbuttonActionPerformed
+
     private void setEmployeeFormData(String employee_id)
     {
         Employee employee_to_set = employee_handler.getEmployee(employee_id);
@@ -832,6 +844,10 @@ public class UserManagementPanel extends javax.swing.JPanel {
     }
     
     private void showAllEmployees() {
+        DefaultTableModel model = (DefaultTableModel) user_jtable.getModel();        
+        //First clear all rows
+        model.setRowCount(0);
+        
         ArrayList<Employee> employee_list = employee_handler.getAllEmployees();
         
         for (Employee employee : employee_list)
@@ -881,6 +897,7 @@ public class UserManagementPanel extends javax.swing.JPanel {
     private javax.swing.JPanel button_panel;
     private javax.swing.JButton cancel_add_user_button;
     private javax.swing.JButton cancel_modify_user_button;
+    private javax.swing.JButton clear_jbutton;
     private javax.swing.JLabel company_name_label;
     private javax.swing.JButton delete_user_jbutton;
     private javax.swing.JLabel employee_id_jlabel;
