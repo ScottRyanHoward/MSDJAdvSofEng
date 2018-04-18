@@ -13,7 +13,7 @@ import java.util.ArrayList;
  */
 public interface SalesInterface_I
 {
-   ArrayList<Sales> getSales(String transaction_id);
-   ArrayList<Sales> getAllSales();
-   ArrayList<Sales> searchSales(String query);
+   void getSales(String transaction_id);
+   void getAllSales();
+   void searchSales(String query);
 }
