@@ -27,7 +27,8 @@ public class LauncherMenuPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         inventoryManagementButton = new javax.swing.JButton();
         transactionsButton = new javax.swing.JButton();
@@ -38,7 +39,6 @@ public class LauncherMenuPanel extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(1238, 678));
         setPreferredSize(new java.awt.Dimension(1878, 1038));
 
-        inventoryManagementButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/inventoryIcon.png"))); // NOI18N
         inventoryManagementButton.setText("InventoryManagement");
         inventoryManagementButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         inventoryManagementButton.setIconTextGap(0);
@@ -46,13 +46,14 @@ public class LauncherMenuPanel extends javax.swing.JPanel {
         inventoryManagementButton.setMinimumSize(new java.awt.Dimension(270, 295));
         inventoryManagementButton.setPreferredSize(new java.awt.Dimension(270, 295));
         inventoryManagementButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        inventoryManagementButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        inventoryManagementButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 inventoryManagementButtonActionPerformed(evt);
             }
         });
 
-        transactionsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/transactionsIcon.png"))); // NOI18N
         transactionsButton.setText("Transactions");
         transactionsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         transactionsButton.setIconTextGap(0);
@@ -60,13 +61,14 @@ public class LauncherMenuPanel extends javax.swing.JPanel {
         transactionsButton.setMinimumSize(new java.awt.Dimension(270, 295));
         transactionsButton.setPreferredSize(new java.awt.Dimension(270, 295));
         transactionsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        transactionsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        transactionsButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 transactionsButtonActionPerformed(evt);
             }
         });
 
-        salesMetricsButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/metricsIcon.png"))); // NOI18N
         salesMetricsButton.setText("Sales Metrics");
         salesMetricsButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         salesMetricsButton.setIconTextGap(0);
@@ -74,13 +76,14 @@ public class LauncherMenuPanel extends javax.swing.JPanel {
         salesMetricsButton.setMinimumSize(new java.awt.Dimension(270, 295));
         salesMetricsButton.setPreferredSize(new java.awt.Dimension(270, 295));
         salesMetricsButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        salesMetricsButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        salesMetricsButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 salesMetricsButtonActionPerformed(evt);
             }
         });
 
-        userManagementButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/usersIcon.png"))); // NOI18N
         userManagementButton.setText("User Management");
         userManagementButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         userManagementButton.setIconTextGap(0);
@@ -88,20 +91,23 @@ public class LauncherMenuPanel extends javax.swing.JPanel {
         userManagementButton.setMinimumSize(new java.awt.Dimension(270, 295));
         userManagementButton.setPreferredSize(new java.awt.Dimension(270, 295));
         userManagementButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        userManagementButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        userManagementButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 userManagementButtonActionPerformed(evt);
             }
         });
 
-        logoutButton.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resources/icons/logoutIcon.png"))); // NOI18N
         logoutButton.setText("Logout");
         logoutButton.setAlignmentY(0.0F);
         logoutButton.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         logoutButton.setVerifyInputWhenFocusTarget(false);
         logoutButton.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        logoutButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        logoutButton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 logoutButtonActionPerformed(evt);
             }
         });

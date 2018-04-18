@@ -5,7 +5,9 @@
  */
 package main.structures;
 
-public class Product
+import java.io.Serializable;
+
+public class Product implements Serializable
 {
     public String category_array[] =
     {

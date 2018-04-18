@@ -5,11 +5,13 @@
  */
 package main.structures;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Matt HP
  */
-public class Employee
+public class Employee implements Serializable
 {
     private String employee_id;
     private String first_name;

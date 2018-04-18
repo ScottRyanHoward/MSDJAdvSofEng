@@ -15,8 +15,8 @@ import java.util.ArrayList;
  */
 public interface InventoryInterface_I
 {
-   Product getProduct(String product_id_number);
-   ArrayList<Product> getAllProducts();
-   ArrayList<Product> searchProducts(String query);
+   void getProduct(String product_id_number);
+   void getAllProducts();
+   void searchProducts(String query);
 
 }
