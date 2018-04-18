@@ -7,6 +7,9 @@ package main.gui.core;
 
 import java.awt.CardLayout;
 import java.awt.CardLayout;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.JComponent;
@@ -28,6 +31,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import main.interfaces.SalesInterface_I;
 import main.structures.Product;
+import main.threadworkers.SalesThreadWorker;
 
 
 /**
@@ -43,18 +47,56 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
     TableRowSorter<TableModel> tr; 
     ArrayList<Product> product_list;
     ArrayList<Product> search_product_list;
-
+    ObjectOutputStream oos = null;
+    ObjectInputStream ios = null;
+    private Socket socket;
+    SalesThreadWorker worker;
+    
     /**
      * Creates new form SalesMetricsPanel
+     * @param in_sales_accessor
+     * @param s
+     * @param new_oos
+     * @param new_ios
      */
-    public SalesMetricsPanel() {
+    public SalesMetricsPanel(SalesInterface_I in_sales_accessor, Socket s, 
+            ObjectOutputStream new_oos , ObjectInputStream new_ios)
+    {
         initComponents();
+        model = new DefaultTableModel(){
+            //@Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        };
+        
+        model.addColumn("Date");
+        model.addColumn("Time"); 
+        model.addColumn("ProductId"); 
+        model.addColumn("Qty"); 
+        model.addColumn("Price");
+        model.addColumn("TransID");        
+        jTable1.setModel(model);
+          
+                
+        sales_accessor = in_sales_accessor;
+        socket = s;
+        ios = new_ios;
+        oos = new_oos;
+        displayAllSales();
     }
     
     private void displayTodayData()
     {
-        
+         String query = "Select * From S Where ";
     }
+    
+    private void displayAllSales()
+    {
+      sales_accessor.getAllSales();
+      threadRecipt();      
+    }
+    
     
     private void displayThisWeekData()
     {
@@ -71,6 +113,12 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         
     }
 
+    private void threadRecipt()
+    {
+       System.out.println("THREAD RECEIPT");
+       worker = new SalesThreadWorker(socket,ios,oos,model);
+       worker.execute();
+    }
 
 
     /**
@@ -80,7 +128,8 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
@@ -153,34 +202,44 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         TODAY.setText("TODAY");
-        TODAY.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        TODAY.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 TODAYActionPerformed(evt);
             }
         });
 
         WEEK.setText("PAST WEEK");
-        WEEK.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        WEEK.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 WEEKActionPerformed(evt);
             }
         });
 
         MONTH.setText("PAST MONTH");
-        MONTH.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        MONTH.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 MONTHActionPerformed(evt);
             }
         });
 
-        StartDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        StartDate.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 StartDateActionPerformed(evt);
             }
         });
 
-        EndDate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        EndDate.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 EndDateActionPerformed(evt);
             }
         });
@@ -190,8 +249,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jLabel7.setText("Date Range");
 
         YEAR.setText("PAST YEAR");
-        YEAR.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        YEAR.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 YEARActionPerformed(evt);
             }
         });
@@ -248,110 +309,13 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jTabbedPane2.addTab("Reports", jPanel1);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null},
-                {null, null, null, null, null, null}
+            new Object [][]
+            {
+
             },
-            new String [] {
-                "Date", "Time", "Product Id", "Qty", "Price", "Transaction ID"
+            new String []
+            {
+
             }
         ));
         jScrollPane1.setViewportView(jTable1);
@@ -362,8 +326,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jInternalFrame1.setVisible(true);
 
         cashRatioCalculate.setText("Calculate");
-        cashRatioCalculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        cashRatioCalculate.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 cashRatioCalculateActionPerformed(evt);
             }
         });
@@ -423,8 +389,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jInternalFrame2.setVisible(true);
 
         NetProfitMarginCalcuate.setText("Calculate");
-        NetProfitMarginCalcuate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        NetProfitMarginCalcuate.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 NetProfitMarginCalcuateActionPerformed(evt);
             }
         });
@@ -485,16 +453,20 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jInternalFrame3.setVisible(true);
 
         TotalRevenueCalculate.setText("Calculate");
-        TotalRevenueCalculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        TotalRevenueCalculate.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 TotalRevenueCalculateActionPerformed(evt);
             }
         });
 
         jLabel14.setText("Total revenue");
 
-        totalSalesIncome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        totalSalesIncome.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 totalSalesIncomeActionPerformed(evt);
             }
         });
@@ -551,8 +523,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jInternalFrame4.setVisible(true);
 
         GrossMarginCalculate.setText("Calculate");
-        GrossMarginCalculate.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        GrossMarginCalculate.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 GrossMarginCalculateActionPerformed(evt);
             }
         });
@@ -687,22 +661,28 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Category 1", "Category 2", "Category 3", "Category 4", "Category 5" }));
 
         ShowData.setText("Show Data");
-        ShowData.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ShowData.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ShowDataActionPerformed(evt);
             }
         });
 
         ProductFilter.setText("Product Filter");
-        ProductFilter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        ProductFilter.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 ProductFilterActionPerformed(evt);
             }
         });
 
         CategoryFilter.setText("Catagory Filter");
-        CategoryFilter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        CategoryFilter.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 CategoryFilterActionPerformed(evt);
             }
         });
@@ -743,8 +723,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
 
         jLabel8.setText("Number of Items Sold:");
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jTextField6.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jTextField6ActionPerformed(evt);
             }
         });
@@ -752,8 +734,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel9.setText("Total Sales:");
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        jTextField7.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 jTextField7ActionPerformed(evt);
             }
         });
@@ -799,8 +783,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jPanel5.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
 
         MenuLauncher.setText("Menu Launcher");
-        MenuLauncher.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        MenuLauncher.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 MenuLauncherActionPerformed(evt);
             }
         });

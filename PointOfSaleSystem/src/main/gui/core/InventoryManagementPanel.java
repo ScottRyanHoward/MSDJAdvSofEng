@@ -6,6 +6,9 @@
 package main.gui.core;
 
 import java.awt.CardLayout;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Map;
 import javax.swing.JComponent;
@@ -28,6 +31,7 @@ import javax.swing.table.TableRowSorter;
 import main.interfaces.InventoryInterfaceForManagers_I;
 import main.interfaces.InventoryInterface_I;
 import main.structures.Product;
+import main.threadworkers.InventoryThreadWorker;
 
 /**
  *
@@ -35,7 +39,8 @@ import main.structures.Product;
  */
 public class InventoryManagementPanel extends javax.swing.JPanel
 {
-
+    ObjectOutputStream oos = null;
+    ObjectInputStream ios = null;
     private InventoryInterfaceForManagers_I inventory_accessor;
     private boolean admin_token;
     Product product = new Product();
@@ -43,23 +48,24 @@ public class InventoryManagementPanel extends javax.swing.JPanel
     TableRowSorter<TableModel> tr; 
     ArrayList<Product> product_list;
     ArrayList<Product> search_product_list;
-   
-    private void filter(String sql)
-    {
-        if(sql.length() <=0)
-            tr.setRowFilter(null);
-        else
-            tr.setRowFilter(RowFilter.regexFilter(sql));
-    }
+    InventoryThreadWorker worker;
+    private Socket s;
+
     
     /**
      * Creates new form InventoryManagementPanel
      * @param in_admin_token
      * @param in_inventory_accessor
+     * @param s
      */
-    public InventoryManagementPanel(boolean in_admin_token,InventoryInterfaceForManagers_I in_inventory_accessor)
+    public InventoryManagementPanel(boolean in_admin_token,InventoryInterfaceForManagers_I in_inventory_accessor, 
+              Socket s, ObjectOutputStream new_oos , ObjectInputStream new_ios)
     {
         admin_token = in_admin_token;
+        inventory_accessor = in_inventory_accessor;
+
+        oos = new_oos;
+        ios = new_ios;
         initComponents();
         model = new DefaultTableModel(){
             //@Override
@@ -90,11 +96,10 @@ public class InventoryManagementPanel extends javax.swing.JPanel
                   updateProductTab();
                 }
             });
-        
-        
-        inventory_accessor = in_inventory_accessor;
-        showAllInventory();
-        
+         
+        inventory_accessor.getAllProducts();
+        threadRecipt();
+          
         category_list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         size_list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
     }
@@ -112,20 +117,28 @@ public class InventoryManagementPanel extends javax.swing.JPanel
         quantity_jtextfield.setText(product_jtable.getValueAt(product_jtable.getSelectedRow(), 6).toString());
         }
     }
-    
-    
+   
     private void showAllInventory()
     {
+        System.out.println("Enter showAllInventory");
         ((DefaultTableModel) product_jtable.getModel()).setNumRows(0);
         if(product_list != null)
         {
              product_list.clear();
         }
+        inventory_accessor.getAllProducts();
+        threadRecipt();
         
-        product_list = inventory_accessor.getAllProducts();
-        
-        displayProducts(product_list);
-        
+        System.out.println("Leaving showAllInventory");
+
+    }
+    
+    private void filter(String sql)
+    {
+        if(sql.length() <=0)
+            tr.setRowFilter(null);
+        else
+            tr.setRowFilter(RowFilter.regexFilter(sql));
     }
     
    private void searchForProducts()
@@ -134,8 +147,7 @@ public class InventoryManagementPanel extends javax.swing.JPanel
         String id = search_product_id_textfield.getText();
         String name = search_product_name_jtextfield.getText();
         size_list.clearSelection();
-        category_list.clearSelection();
-        
+        category_list.clearSelection();        
         
         if (id.length() == 0 &&
             name.length() ==0)
@@ -157,31 +169,14 @@ public class InventoryManagementPanel extends javax.swing.JPanel
             }
 
             ((DefaultTableModel)product_jtable.getModel()).setRowCount(0);
-            search_product_list = inventory_accessor.searchProducts(query);
-            displayProducts(search_product_list);
+             inventory_accessor.searchProducts(query);
+             product_jtable.clearSelection();
+             threadRecipt();
+//            displayProducts(search_product_list);
         }         
     }
-    
-    private void displayProducts(ArrayList<Product> product_list)
-    {
-        for (Product record : product_list)
-        {
-            Object[] row =
-            {
-                record.getProductId(),
-                record.getCategory(),
-                record.getProductName(),
-                record.getDescription(),
-                record.getSize(),
-                record.getPrice(),
-                record.getQuantity(),
-
-            };
-            model.addRow(row);
-        }
-    }
-
-    /**
+   
+   /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
      * regenerated by the Form Editor.
@@ -804,6 +799,7 @@ public class InventoryManagementPanel extends javax.swing.JPanel
        if(new_product != null && new_product.getProductId().length() > 0)
        {
           inventory_accessor.addProduct(new_product);
+           threadRecipt();
        }       
        product_list.add(new_product);
     }//GEN-LAST:event_add_product_buttonActionPerformed
@@ -828,8 +824,11 @@ public class InventoryManagementPanel extends javax.swing.JPanel
     {//GEN-HEADEREND:event_delete_buttonActionPerformed
        if(!product_id_textfield.getText().isEmpty())
        {
-        inventory_accessor.deleteProduct(product_id_textfield.getText());
-        product_jtable.clearSelection();
+        
+         inventory_accessor.deleteProduct(product_id_textfield.getText());
+          product_jtable.clearSelection();
+         threadRecipt();
+
        }
         else
            JOptionPane.showMessageDialog(this,
@@ -838,6 +837,12 @@ public class InventoryManagementPanel extends javax.swing.JPanel
            JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_delete_buttonActionPerformed
 
+    private void threadRecipt()
+    {
+       System.out.println("THREAD RECEIPT");
+       worker = new InventoryThreadWorker(s,ios,oos,model);
+       worker.execute();
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton add_product_button;
