@@ -3,6 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package main.threadworkers;
 
 import java.io.ObjectInputStream;
@@ -16,34 +21,57 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
+import main.gui.core.TransactionsPanel;
 import main.structures.Product;
 
 /**
  * description - used to start threads and update the gui
  *
  */
-public class InventoryThreadWorker extends SwingWorker<DefaultTableModel, ArrayList<Product>>
+
+
+public class TransactionThreadWorker extends SwingWorker<DefaultTableModel, ArrayList<Product>>
 {
+
     //initialize varibles
     ArrayList<Product> list = new ArrayList();
     private ObjectInputStream ios = null;
     private ObjectOutputStream oos = null;
     private Socket s;
-
+    private double subtotal;
+    private double tax;
+    private double total;
+    JLabel subtotal_label;
+    JLabel total_label;
+    JLabel tax_label;
+    JPanel trans_panel;
     DefaultTableModel model;
     //Executor service
     private ExecutorService exec;
+    ArrayList<Product> product_cart;
 
-    public InventoryThreadWorker(Socket new_socket, ObjectInputStream new_ios,
-            ObjectOutputStream new_oos, DefaultTableModel new_model,ArrayList<Product> new_list)
+    public TransactionThreadWorker(JPanel new_trans_panel,JLabel subtotal_label, JLabel total_label, JLabel tax_label,Socket new_socket, ObjectInputStream new_ios,
+            ObjectOutputStream new_oos, DefaultTableModel new_model, double in_subtotal,
+            double in_tax, double in_total, ArrayList<Product> product_cart)
     {
         this.ios = new_ios;
         this.oos = new_oos;
         this.s = new_socket;
         this.model = new_model;
-        this.list = new_list;
+        this.subtotal = in_subtotal;
+        this.tax = in_tax;
+        this.total = in_total;
+        this.trans_panel = new_trans_panel;
+        this.subtotal_label = subtotal_label;
+        this.total_label = total_label;
+        this.tax_label = tax_label;
+        this.product_cart = product_cart;
     }
 
     @Override
@@ -90,35 +118,32 @@ public class InventoryThreadWorker extends SwingWorker<DefaultTableModel, ArrayL
     @Override
     protected void process(List<ArrayList<Product>> chunks)
     {
-        for (Product record : chunks.get(0))
+        if (!chunks.get(0).isEmpty())
         {
-            Object[] row =
+            for (Product record : chunks.get(0))
             {
-                record.getProductId(),
-                record.getCategory(),
-                record.getProductName(),
-                record.getDescription(),
-                record.getSize(),
-                record.getPrice(),
-                record.getQuantity(),
+                Object[] row =
+                {
+                    record.getProductId(),
+                    record.getProductName(),
+                    record.getCategory(),
+                    record.getPrice(),
+                    "DELETE"
+                };
+                model.addRow(row);
 
-            };
-            model.addRow(row);
-            
-            boolean found = false;
-            if(!list.isEmpty())
-            {
-            for(Product list_record : list)
-            {              
-              if(list_record.getProductId().compareTo(record.getProductId())==0)
-              {
-                break;
-              }
+                subtotal = subtotal + record.getPrice();
+                tax = tax + (record.getPrice() * 0.07);
+                total = subtotal + tax;
+                product_cart.add(record);           
             }
-            
-            if(!found)
-                list.add(record);
+            subtotal_label.setText(Double.toString(subtotal));
+            tax_label.setText(Double.toString(tax));
+            total_label.setText(Double.toString(total));
         }
+        else
+        {
+          JOptionPane.showMessageDialog(trans_panel, "INCORRECT ITEM CODE ENTERED", "ERROR", JOptionPane.ERROR_MESSAGE);
         }
     }
 

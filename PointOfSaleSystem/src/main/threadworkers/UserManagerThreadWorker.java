@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package main.threadworkers;
 
 import java.io.ObjectInputStream;
@@ -18,16 +13,22 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import main.structures.Product;
+import main.structures.Employee;
 
-/**
- * description - used to start threads and update the gui
- *
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
  */
-public class InventoryThreadWorker extends SwingWorker<DefaultTableModel, ArrayList<Product>>
+/**
+ *
+ * @author Matt HP
+ */
+public class UserManagerThreadWorker extends SwingWorker<DefaultTableModel, ArrayList<Employee>>
 {
+
     //initialize varibles
-    ArrayList<Product> list = new ArrayList();
+    ArrayList<Employee> list = new ArrayList();
     private ObjectInputStream ios = null;
     private ObjectOutputStream oos = null;
     private Socket s;
@@ -36,8 +37,8 @@ public class InventoryThreadWorker extends SwingWorker<DefaultTableModel, ArrayL
     //Executor service
     private ExecutorService exec;
 
-    public InventoryThreadWorker(Socket new_socket, ObjectInputStream new_ios,
-            ObjectOutputStream new_oos, DefaultTableModel new_model,ArrayList<Product> new_list)
+    public UserManagerThreadWorker(Socket new_socket, ObjectInputStream new_ios,
+            ObjectOutputStream new_oos, DefaultTableModel new_model, ArrayList<Employee> new_list)
     {
         this.ios = new_ios;
         this.oos = new_oos;
@@ -49,21 +50,21 @@ public class InventoryThreadWorker extends SwingWorker<DefaultTableModel, ArrayL
     @Override
     protected DefaultTableModel doInBackground() throws Exception
     {
-        Callable<ArrayList<Product>> load_product_task = new Callable<ArrayList<Product>>()
+        Callable<ArrayList<Employee>> load_product_task = new Callable<ArrayList<Employee>>()
         {
             @Override
-            public ArrayList<Product> call() throws Exception
+            public ArrayList<Employee> call() throws Exception
             {
-                return loadProduct();
+                return loadEmployee();
             }
 
-            private ArrayList<Product> loadProduct()
+            private ArrayList<Employee> loadEmployee()
             {
 
-                ArrayList<Product> albums = new ArrayList();
+                ArrayList<Employee> albums = new ArrayList();
                 try
                 {
-                    albums = (ArrayList<Product>) ios.readObject();
+                    albums = (ArrayList<Employee>) ios.readObject();
                 }
                 catch (Exception e)
                 {
@@ -76,11 +77,11 @@ public class InventoryThreadWorker extends SwingWorker<DefaultTableModel, ArrayL
         exec = Executors.newFixedThreadPool(10);
 
         //completion service to organize the threads
-        final CompletionService<ArrayList<Product>> service
+        final CompletionService<ArrayList<Employee>> service
                 = new ExecutorCompletionService<>(exec);
 
         service.submit(load_product_task);
-        final Future<ArrayList<Product>> future = service.take();
+        final Future<ArrayList<Employee>> future = service.take();
         publish(future.get());
 
         exec.shutdown();
@@ -88,38 +89,37 @@ public class InventoryThreadWorker extends SwingWorker<DefaultTableModel, ArrayL
     }
 
     @Override
-    protected void process(List<ArrayList<Product>> chunks)
+    protected void process(List<ArrayList<Employee>> chunks)
     {
-        for (Product record : chunks.get(0))
+        for (Employee record : chunks.get(0))
         {
+            System.out.println(record.getEmployeeId());
             Object[] row =
             {
-                record.getProductId(),
-                record.getCategory(),
-                record.getProductName(),
-                record.getDescription(),
-                record.getSize(),
-                record.getPrice(),
-                record.getQuantity(),
-
+                record.getEmployeeId(),
+                record.getFirstName(),
+                record.getLastName(),
+                record.getAddress(),
+                record.getSsn(),
+                record.getHours(),
+                record.getWage(),
+            //              record.getAccountPassword(),
+            //              record.getIsAdmin()
             };
             model.addRow(row);
-            
             boolean found = false;
-            if(!list.isEmpty())
-            {
-            for(Product list_record : list)
+            for(Employee list_record : list)
             {              
-              if(list_record.getProductId().compareTo(record.getProductId())==0)
+              if(list_record.getEmployeeId() == record.getEmployeeId())
               {
                 break;
               }
             }
-            
             if(!found)
                 list.add(record);
         }
-        }
+        
+        
     }
 
     @Override

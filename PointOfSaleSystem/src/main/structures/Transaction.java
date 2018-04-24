@@ -60,7 +60,7 @@ public class Transaction implements Serializable
     /**
      * @param date the date to set
      */
-    public void setTransactionDate(String transaction_id)
+    public void setTransactionDate(String transaction_date)
     {
         this.transaction_date = transaction_date;
     }
@@ -76,7 +76,7 @@ public class Transaction implements Serializable
     /**
      * @param date the date to set
      */
-    public void setTotal(double transaction_id)
+    public void setTotal(double total)
     {
         this.total = total;
     }

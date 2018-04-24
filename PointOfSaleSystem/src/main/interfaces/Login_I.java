@@ -11,5 +11,5 @@ package main.interfaces;
  */
 public interface Login_I
 {
-    boolean checkLogin(String employee_id, String password);
+    void checkLogin(String employee_id, String password);
 }

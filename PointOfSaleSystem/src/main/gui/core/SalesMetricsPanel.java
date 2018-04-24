@@ -6,11 +6,16 @@
 package main.gui.core;
 
 import java.awt.CardLayout;
-import java.awt.CardLayout;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -31,96 +36,187 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import main.interfaces.SalesInterface_I;
 import main.structures.Product;
+import main.threadworkers.SalesProductWorker;
 import main.threadworkers.SalesThreadWorker;
-
-
 /**
  *
  * @author Dakota
  */
-public class SalesMetricsPanel extends javax.swing.JPanel {
-    
+public class SalesMetricsPanel extends javax.swing.JPanel
+{
+
     private SalesInterface_I sales_accessor;
     private boolean admin_token;
     Product product = new Product();
-    DefaultTableModel model;
-    TableRowSorter<TableModel> tr; 
-    ArrayList<Product> product_list;
-    ArrayList<Product> search_product_list;
-    ObjectOutputStream oos = null;
-    ObjectInputStream ios = null;
-    private Socket socket;
-    SalesThreadWorker worker;
+    DefaultTableModel transaction_model;
+    DefaultTableModel product_model;
+
+    TableRowSorter<TableModel> tr;
+    ArrayList<String> product_list;
+    ObjectOutputStream sales_oos = null;
+    ObjectInputStream sales_ios = null;
+    private Socket sales_socket;
+    SalesThreadWorker sales_worker;
     
+    private SalesInterface_I sales_product_accessor;
+
+    ObjectOutputStream sales_product_oos = null;
+    ObjectInputStream sales_product_ios = null;
+    private Socket sales_product_socket;
+    SalesProductWorker sales_product_worker;
     /**
      * Creates new form SalesMetricsPanel
+     *
      * @param in_sales_accessor
      * @param s
      * @param new_oos
      * @param new_ios
      */
-    public SalesMetricsPanel(SalesInterface_I in_sales_accessor, Socket s, 
-            ObjectOutputStream new_oos , ObjectInputStream new_ios)
+    public SalesMetricsPanel(SalesInterface_I in_sales_accessor, Socket s,
+            ObjectOutputStream new_oos, ObjectInputStream new_ios,
+            SalesInterface_I in_sales_product_accessor,Socket s_product,
+            ObjectOutputStream new_product_oos, ObjectInputStream new_product_ios)
     {
         initComponents();
-        model = new DefaultTableModel(){
+        transaction_model = new DefaultTableModel()
+        {
             //@Override
-            public boolean isCellEditable(int row, int column){
+            public boolean isCellEditable(int row, int column)
+            {
+                return false;
+            }
+        };
+        category_combobox.addItem("ALL");
+        
+        for(String cat : product.category_array)
+        {
+          category_combobox.addItem(cat);
+        }
+        product_combo.addItem("");
+        transaction_model.addColumn("Date");
+        transaction_model.addColumn("TransId");
+        transaction_model.addColumn("Tax");
+        transaction_model.addColumn("Total");
+        transaction_table.setModel(transaction_model);
+
+        product_model = new DefaultTableModel()
+        {
+            //@Override
+            public boolean isCellEditable(int row, int column)
+            {
                 return false;
             }
         };
         
-        model.addColumn("Date");
-        model.addColumn("Time"); 
-        model.addColumn("ProductId"); 
-        model.addColumn("Qty"); 
-        model.addColumn("Price");
-        model.addColumn("TransID");        
-        jTable1.setModel(model);
-          
-                
+        product_model.addColumn("TransId");
+        product_model.addColumn("Product Id");
+        product_model.addColumn("Product Name");
+        product_model.addColumn("Category");
+        product_model.addColumn("Product_Price");
+        product_model.addColumn("Quantity");
+        product_table.setModel(product_model);  
+        
         sales_accessor = in_sales_accessor;
-        socket = s;
-        ios = new_ios;
-        oos = new_oos;
+        sales_socket = s;
+        sales_ios = new_ios;
+        sales_oos = new_oos;
+        
+        sales_product_socket = s_product;
+        sales_product_ios = new_product_ios;
+        sales_product_oos = new_product_oos;
+        sales_product_accessor = in_sales_product_accessor;
+        
         displayAllSales();
+        displayAllProcuctSales();
     }
-    
+
     private void displayTodayData()
     {
-         String query = "Select * From S Where ";
+     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	String date = sdf.format(new Date()); 
+  
+        String query = " SELECT  * FROM Product_sales WHERE "
+                + "From_transaction_date >= '" + date + "'";
+
+        sales_accessor.searchSales(query);
+        salesThreadRecipt();
     }
-    
+
     private void displayAllSales()
     {
-      sales_accessor.getAllSales();
-      threadRecipt();      
+        sales_accessor.getAllSales();
+        salesThreadRecipt();
     }
-    
-    
+
     private void displayThisWeekData()
     {
-        
+        // Get calendar set to current date and time
+        Calendar c = GregorianCalendar.getInstance();
+        // Set the calendar to monday of the current week
+        c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+         // Print dates of the current week starting on Monday
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String startDate = "", endDate = "";
+
+        startDate = df.format(c.getTime());
+        c.add(Calendar.DATE, 6);
+        endDate = df.format(c.getTime());
+
+        String query = " SELECT  * FROM Product_sales WHERE From_date >= '"
+                + startDate + "' AND To_date <= '"
+                + endDate + "'";
+ 
+        sales_accessor.searchSales(query);
+        salesThreadRecipt();
     }
-        
+
     private void displayThisMonthData()
     {
-        
+        String month = String.valueOf(Calendar.getInstance().get(Calendar.MONTH) + 1);
+
+        if (month.length() < 2)
+        {
+            month = "0" + month;
+        }
+
+        String query = "Select * from Transaction where "
+                + "substring(transaction_date,6,2) = '" + month + "'";
+        sales_accessor.searchSales(query);
+        salesThreadRecipt();
+    }
+
+    private void displayAllProcuctSales()
+    {
+       System.out.println("displayAllProcuctSales");
+       String query = "Select purchased_in.* , Product.Category, Product.product_name From purchased_in " +
+                    ", Product where purchased_in.product_id = product.product_id";    
+       sales_product_accessor.searchSales(query);   
+       productSalesThreadRecipt();
     }
     
     private void displayThisYearData()
     {
-        
+        int year = Calendar.getInstance().get(Calendar.YEAR);
+        String query = "Select * from Transaction where "
+                + "substring(transaction_date,1,4) = '" + year + "'";
+        sales_accessor.searchSales(query);
+        salesThreadRecipt();
     }
 
-    private void threadRecipt()
+    private void salesThreadRecipt()
     {
-       System.out.println("THREAD RECEIPT");
-       worker = new SalesThreadWorker(socket,ios,oos,model);
-       worker.execute();
+        System.out.println("THREAD RECEIPT");
+        sales_worker = new SalesThreadWorker(sales_socket, sales_ios, sales_oos, transaction_model,total_sales,avg_sales,items_sold);
+        sales_worker.execute();
     }
 
-
+    private void productSalesThreadRecipt()
+    {
+        System.out.println("Product Sales THREAD RECEIPT");
+        sales_product_worker = new SalesProductWorker(sales_product_socket, sales_product_ios, sales_product_oos, product_model,product_combo);
+        sales_product_worker.execute();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -131,6 +227,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
     private void initComponents()
     {
 
+        buttonGroup1 = new javax.swing.ButtonGroup();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         TODAY = new javax.swing.JRadioButton();
@@ -141,9 +238,14 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         YEAR = new javax.swing.JRadioButton();
+        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 0));
+        jButton1 = new javax.swing.JButton();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        transaction_table = new javax.swing.JTable();
+        jPanel8 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        product_table = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
         jInternalFrame1 = new javax.swing.JInternalFrame();
         cashRatioCalculate = new javax.swing.JButton();
@@ -182,18 +284,16 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jPanel4 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jPanel6 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        ShowData = new javax.swing.JButton();
-        ProductFilter = new javax.swing.JRadioButton();
-        CategoryFilter = new javax.swing.JRadioButton();
+        product_combo = new javax.swing.JComboBox<>();
+        category_combobox = new javax.swing.JComboBox<>();
+        jButton2 = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
+        items_sold = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
+        total_sales = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTextField8 = new javax.swing.JTextField();
+        avg_sales = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         MenuLauncher = new javax.swing.JButton();
 
@@ -201,6 +301,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
+        buttonGroup1.add(TODAY);
         TODAY.setText("TODAY");
         TODAY.addActionListener(new java.awt.event.ActionListener()
         {
@@ -210,6 +311,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup1.add(WEEK);
         WEEK.setText("PAST WEEK");
         WEEK.addActionListener(new java.awt.event.ActionListener()
         {
@@ -219,6 +321,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
             }
         });
 
+        buttonGroup1.add(MONTH);
         MONTH.setText("PAST MONTH");
         MONTH.addActionListener(new java.awt.event.ActionListener()
         {
@@ -248,6 +351,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
 
         jLabel7.setText("Date Range");
 
+        buttonGroup1.add(YEAR);
         YEAR.setText("PAST YEAR");
         YEAR.addActionListener(new java.awt.event.ActionListener()
         {
@@ -257,31 +361,43 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setText("Search Range");
+        jButton1.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(89, 89, 89))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(jLabel7)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(StartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel6)
+                .addGap(27, 27, 27)
+                .addComponent(EndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                .addContainerGap())
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(TODAY)
                     .addComponent(YEAR)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(MONTH)
-                            .addComponent(WEEK))
-                        .addGap(67, 67, 67)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(67, 67, 67)
-                                .addComponent(jLabel7))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(StartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel6)
-                                .addGap(27, 27, 27)
-                                .addComponent(EndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap(790, Short.MAX_VALUE))
+                    .addComponent(MONTH)
+                    .addComponent(WEEK))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -289,26 +405,27 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addComponent(TODAY)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(StartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel6)
-                            .addComponent(EndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(WEEK)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(MONTH)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(YEAR)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addComponent(WEEK)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(MONTH)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(YEAR)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(filler1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(StartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(EndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton1)))
         );
 
         jTabbedPane2.addTab("Reports", jPanel1);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTabbedPane1.setToolTipText("");
+
+        transaction_table.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][]
             {
 
@@ -318,9 +435,34 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(transaction_table);
 
-        jTabbedPane1.addTab("Data Table", jScrollPane1);
+        jTabbedPane1.addTab("Transaction Reports", jScrollPane1);
+
+        product_table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
+
+            },
+            new String []
+            {
+
+            }
+        ));
+        jScrollPane2.setViewportView(product_table);
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1298, Short.MAX_VALUE)
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 988, Short.MAX_VALUE)
+        );
+
+        jTabbedPane1.addTab("Product Report", jPanel8);
 
         jInternalFrame1.setTitle("CASH RATIO");
         jInternalFrame1.setVisible(true);
@@ -560,7 +702,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
                         .addComponent(jLabel19)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(costOfGoodsSold)))
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addContainerGap(761, Short.MAX_VALUE))
         );
         jInternalFrame4Layout.setVerticalGroup(
             jInternalFrame4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -644,7 +786,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addGap(121, 121, 121)
                 .addComponent(jLabel5)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -656,34 +798,28 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
 
         jPanel6.setBorder(javax.swing.BorderFactory.createTitledBorder("Product Search"));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Product 1", "Product 2", "Product 3", "Product 4", "Product 5" }));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Category 1", "Category 2", "Category 3", "Category 4", "Category 5" }));
-
-        ShowData.setText("Show Data");
-        ShowData.addActionListener(new java.awt.event.ActionListener()
+        product_combo.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                ShowDataActionPerformed(evt);
+                product_comboActionPerformed(evt);
             }
         });
 
-        ProductFilter.setText("Product Filter");
-        ProductFilter.addActionListener(new java.awt.event.ActionListener()
+        category_combobox.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                ProductFilterActionPerformed(evt);
+                category_comboboxActionPerformed(evt);
             }
         });
 
-        CategoryFilter.setText("Catagory Filter");
-        CategoryFilter.addActionListener(new java.awt.event.ActionListener()
+        jButton2.setText("Search Products");
+        jButton2.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                CategoryFilterActionPerformed(evt);
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -691,54 +827,46 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(179, 179, 179)
-                .addComponent(ShowData)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(category_combobox, javax.swing.GroupLayout.Alignment.LEADING, 0, 418, Short.MAX_VALUE)
+                    .addComponent(product_combo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 8, Short.MAX_VALUE))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(142, 142, 142)
+                .addComponent(jButton2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ProductFilter)
-                    .addComponent(CategoryFilter))
-                .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(ProductFilter)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(CategoryFilter)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(ShowData)
-                .addGap(4, 4, 4))
+                .addComponent(product_combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(category_combobox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(jButton2))
         );
 
         jPanel7.setBorder(javax.swing.BorderFactory.createTitledBorder("Total Sales"));
 
         jLabel8.setText("Number of Items Sold:");
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener()
+        items_sold.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jTextField6ActionPerformed(evt);
+                items_soldActionPerformed(evt);
             }
         });
 
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.TRAILING);
         jLabel9.setText("Total Sales:");
 
-        jTextField7.addActionListener(new java.awt.event.ActionListener()
+        total_sales.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                jTextField7ActionPerformed(evt);
+                total_salesActionPerformed(evt);
             }
         });
 
@@ -757,10 +885,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
-                    .addComponent(jTextField7)
-                    .addComponent(jTextField8))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(items_sold, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                    .addComponent(total_sales)
+                    .addComponent(avg_sales))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -768,15 +896,15 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
                 .addGap(20, 20, 20)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(items_sold, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(total_sales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel10)
-                    .addComponent(jTextField8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(avg_sales, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -813,21 +941,23 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTabbedPane2)))
-                    .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 1, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 661, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(35, 35, 35))
+                .addComponent(jTabbedPane1)
+                .addGap(112, 112, 112))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -842,10 +972,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
                             .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(26, 26, 26)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -857,23 +987,18 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         displayTodayData();
     }//GEN-LAST:event_TODAYActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void items_soldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_items_soldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_items_soldActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void total_salesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_total_salesActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_total_salesActionPerformed
 
     private void MenuLauncherActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuLauncherActionPerformed
-        CardLayout card = (CardLayout)this.getParent().getLayout();
+        CardLayout card = (CardLayout) this.getParent().getLayout();
         card.show(this.getParent(), "launcherMenuPanel");
     }//GEN-LAST:event_MenuLauncherActionPerformed
-
-    // SHOW DATA button
-    private void ShowDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ShowDataActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ShowDataActionPerformed
 
     // WEEK radio button
     private void WEEKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_WEEKActionPerformed
@@ -890,15 +1015,6 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
         displayThisYearData();
     }//GEN-LAST:event_YEARActionPerformed
 
-    // Product Filter
-    private void ProductFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ProductFilterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_ProductFilterActionPerformed
-
-    private void CategoryFilterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CategoryFilterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_CategoryFilterActionPerformed
-
     private void StartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartDateActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_StartDateActionPerformed
@@ -908,24 +1024,24 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_EndDateActionPerformed
 
     private void TotalRevenueCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalRevenueCalculateActionPerformed
-        
+
         float result = (Float.parseFloat(totalSalesIncome.getText()) - Float.parseFloat(costOfReturns.getText()));
-        
+
         totalRevenue.setText(String.valueOf(result));
     }//GEN-LAST:event_TotalRevenueCalculateActionPerformed
 
     private void NetProfitMarginCalcuateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_NetProfitMarginCalcuateActionPerformed
-        
+
         float result = (Float.parseFloat(monthlyRevenue.getText()) - Float.parseFloat(salesExpenses.getText()));
-        
+
         netProfitMargin.setText(String.valueOf(result));
     }//GEN-LAST:event_NetProfitMarginCalcuateActionPerformed
 
     private void GrossMarginCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GrossMarginCalculateActionPerformed
-        
+
         float result = (Float.parseFloat(totalSalesRevenue.getText()) - Float.parseFloat(costOfGoodsSold.getText()))
-                        / Float.parseFloat(totalSalesRevenue.getText());
-        
+                / Float.parseFloat(totalSalesRevenue.getText());
+
         grossMargin.setText(String.valueOf(result));
     }//GEN-LAST:event_GrossMarginCalculateActionPerformed
 
@@ -934,36 +1050,91 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_totalSalesIncomeActionPerformed
 
     private void cashRatioCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cashRatioCalculateActionPerformed
-        
+
         float result = (Float.parseFloat(cash.getText()) / Float.parseFloat(currentLiabilities.getText()));
-        
+
         cashRatio.setText(String.valueOf(result));
     }//GEN-LAST:event_cashRatioCalculateActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
+    {//GEN-HEADEREND:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void product_comboActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_product_comboActionPerformed
+    {//GEN-HEADEREND:event_product_comboActionPerformed
+    }//GEN-LAST:event_product_comboActionPerformed
+
+    private void category_comboboxActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_category_comboboxActionPerformed
+    {//GEN-HEADEREND:event_category_comboboxActionPerformed
+    }//GEN-LAST:event_category_comboboxActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton2ActionPerformed
+    {//GEN-HEADEREND:event_jButton2ActionPerformed
+        String product_combo_item = (String) product_combo.getSelectedItem();
+        String category_combo_item = (String) category_combobox.getSelectedItem();
+
+        String category_search = "";
+        String product_search = "";
+
+        String query = "Select purchased_in.* , Product.Category, Product.product_name From purchased_in "
+                + ", Product where purchased_in.product_id = product.product_id ";
+
+        if (category_combo_item.compareTo("ALL") == 0
+                && product_combo_item.compareTo("ALL") == 0)
+        {
+            System.out.println("GOT HERE");
+            displayAllProcuctSales();
+            
+        }
+        else
+        {
+            System.out.println("ELSE HERE");
+            System.out.println(product_combo_item);
+
+            if (product_combo_item.compareTo("ALL") != 0)
+            {
+                System.out.println("ADD PRODUCT");
+                query += " AND product.product_name = '" + product_combo_item + "'";
+            }
+
+            if (category_combo_item.compareTo("ALL") != 0)
+            {
+                System.out.println("ADD CATE");
+                query += " AND product.category = '" + category_combo_item + "'";
+            }
+
+            sales_product_accessor.searchSales(query);
+            productSalesThreadRecipt();
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButton CategoryFilter;
     private javax.swing.JTextField EndDate;
     private javax.swing.JButton GrossMarginCalculate;
     private javax.swing.JRadioButton MONTH;
     private javax.swing.JButton MenuLauncher;
     private javax.swing.JButton NetProfitMarginCalcuate;
-    private javax.swing.JRadioButton ProductFilter;
-    private javax.swing.JButton ShowData;
     private javax.swing.JTextField StartDate;
     private javax.swing.JRadioButton TODAY;
     private javax.swing.JButton TotalRevenueCalculate;
     private javax.swing.JRadioButton WEEK;
     private javax.swing.JRadioButton YEAR;
+    private javax.swing.JTextField avg_sales;
+    private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JTextField cash;
     private javax.swing.JTextField cashRatio;
     private javax.swing.JButton cashRatioCalculate;
+    private javax.swing.JComboBox<String> category_combobox;
     private javax.swing.JTextField costOfGoodsSold;
     private javax.swing.JTextField costOfReturns;
     private javax.swing.JTextField currentLiabilities;
+    private javax.swing.Box.Filler filler1;
     private javax.swing.JTextField grossMargin;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JTextField items_sold;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JInternalFrame jInternalFrame1;
     private javax.swing.JInternalFrame jInternalFrame2;
     private javax.swing.JInternalFrame jInternalFrame3;
@@ -994,18 +1165,20 @@ public class SalesMetricsPanel extends javax.swing.JPanel {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField monthlyRevenue;
     private javax.swing.JTextField netProfitMargin;
+    private javax.swing.JComboBox<String> product_combo;
+    private javax.swing.JTable product_table;
     private javax.swing.JTextField salesExpenses;
     private javax.swing.JTextField totalRevenue;
     private javax.swing.JTextField totalSalesIncome;
     private javax.swing.JTextField totalSalesRevenue;
+    private javax.swing.JTextField total_sales;
+    private javax.swing.JTable transaction_table;
     // End of variables declaration//GEN-END:variables
 }

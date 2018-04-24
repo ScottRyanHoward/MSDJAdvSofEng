@@ -6,6 +6,33 @@
 package main.gui.core;
 
 import java.awt.CardLayout;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
+import java.util.Date;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.*;
+import main.implementation.InventoryImpl;
+import main.interfaces.InventoryInterface_I;
+import main.implementation.TransactionImpl;
+import main.interfaces.InventoryInterfaceForManagers_I;
+import main.interfaces.SalesInterface_I;
+import main.interfaces.TransactionInterface_I;
+import main.structures.Transaction;
+import main.structures.Product;
+import main.structures.Purchased;
+import main.threadworkers.TransactionThreadWorker;
 
 /**
  *
@@ -13,13 +40,60 @@ import java.awt.CardLayout;
  */
 public class TransactionsPanel extends javax.swing.JPanel {
 
+    InventoryInterface_I inventory_accessor;
+    TransactionInterface_I transaction_accessor;
+    
+    private double subtotal;
+    private double tax;
+    private double total;
+    private boolean delete;
+    JFrame item_popup;
+    
+    private double trans_tax;
+    private double trans_total;
+    private String trans_date;
+    private String trans_id;  //make this an int later
+    private String trans_payment;
+    
+    ArrayList<Product> product_cart;
+    ObjectOutputStream oos = null;
+    ObjectInputStream ios = null;
+    private Socket socket;
+    TransactionThreadWorker worker;
+    DefaultTableModel model;
+    
     /**
      * Creates new form TransactionsPanel
+     * @param in_inventory_accessor
+     * @param in_transaction_accesor
+     * @param s
+     * @param new_oos
+     * @param new_ios
      */
-    public TransactionsPanel() {
+        
+    public TransactionsPanel(InventoryInterfaceForManagers_I in_inventory_accessor, 
+                             TransactionInterface_I in_transaction_accesor,
+                             Socket s,
+                             ObjectOutputStream new_oos, 
+                             ObjectInputStream new_ios) 
+    {
         initComponents();
+       
+        socket = s;
+        ios = new_ios;
+        oos = new_oos;
+        inventory_accessor = in_inventory_accessor;
+        transaction_accessor = in_transaction_accesor;
+        model = (DefaultTableModel) transaction_table.getModel();
+        removeitem_button.setVisible(false);
+        subtotal = 00.00;
+        tax = 00.00;
+        total = 00.00;
+        delete=false;
+        product_cart = new ArrayList();
     }
-
+    
+   
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -27,32 +101,28 @@ public class TransactionsPanel extends javax.swing.JPanel {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         logo_jpanel = new javax.swing.JPanel();
         company_name_label = new javax.swing.JLabel();
         product_table_jpanel = new javax.swing.JPanel();
         button_panel1 = new javax.swing.JPanel();
-        transaction_jbutton1 = new javax.swing.JButton();
-        menu_jbutton1 = new javax.swing.JButton();
-        add_to_cart_jbutton1 = new javax.swing.JButton();
-        admin_jbutton2 = new javax.swing.JButton();
+        enter_code_button = new javax.swing.JButton();
+        enter_coupon_button = new javax.swing.JButton();
+        finalze_button = new javax.swing.JButton();
+        empty_cart_button = new javax.swing.JButton();
         button_panel2 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
+        subtotal_label = new javax.swing.JLabel();
+        taxes_label = new javax.swing.JLabel();
+        coupons_label = new javax.swing.JLabel();
+        total_label = new javax.swing.JLabel();
+        subtotal_variable = new javax.swing.JLabel();
+        coupons_variable = new javax.swing.JLabel();
+        taxes_variable = new javax.swing.JLabel();
+        total_variable = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel1 = new javax.swing.JPanel();
-        jPanel2 = new javax.swing.JPanel();
-        jLabel2 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        transaction_table = new javax.swing.JTable();
         product_jpanel = new javax.swing.JPanel();
         icon_jpanel = new javax.swing.JPanel();
         icon_jLabel = new javax.swing.JLabel();
@@ -72,9 +142,10 @@ public class TransactionsPanel extends javax.swing.JPanel {
         size_label = new javax.swing.JLabel();
         size_jtextfield = new javax.swing.JTextField();
         button_panel = new javax.swing.JPanel();
-        transaction_jbutton = new javax.swing.JButton();
+        inventory_button = new javax.swing.JButton();
         admin_jbutton = new javax.swing.JButton();
         menu_jbutton = new javax.swing.JButton();
+        removeitem_button = new javax.swing.JButton();
         loco_icon_panel = new javax.swing.JPanel();
         logo_jlabel = new javax.swing.JLabel();
 
@@ -106,24 +177,42 @@ public class TransactionsPanel extends javax.swing.JPanel {
 
         button_panel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        transaction_jbutton1.setText("Enter Code");
-        transaction_jbutton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                transaction_jbutton1ActionPerformed(evt);
+        enter_code_button.setText("Enter Code");
+        enter_code_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                enter_code_buttonActionPerformed(evt);
             }
         });
 
-        menu_jbutton1.setBackground(new java.awt.Color(255, 0, 51));
-        menu_jbutton1.setText("Enter Coupon");
-        menu_jbutton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menu_jbutton1ActionPerformed(evt);
+        enter_coupon_button.setBackground(new java.awt.Color(255, 0, 0));
+        enter_coupon_button.setText("Enter Coupon");
+        enter_coupon_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                enter_coupon_buttonActionPerformed(evt);
             }
         });
 
-        add_to_cart_jbutton1.setText("Finalize");
+        finalze_button.setText("Finalize");
+        finalze_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                finalze_buttonActionPerformed(evt);
+            }
+        });
 
-        admin_jbutton2.setText("Empty Cart");
+        empty_cart_button.setText("Empty Cart");
+        empty_cart_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                empty_cart_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout button_panel1Layout = new javax.swing.GroupLayout(button_panel1);
         button_panel1.setLayout(button_panel1Layout);
@@ -131,50 +220,46 @@ public class TransactionsPanel extends javax.swing.JPanel {
             button_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(button_panel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(button_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(transaction_jbutton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(button_panel1Layout.createSequentialGroup()
-                        .addComponent(menu_jbutton1, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(button_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(admin_jbutton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(add_to_cart_jbutton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(enter_coupon_button, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 115, Short.MAX_VALUE)
+                .addComponent(enter_code_button, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(63, 63, 63)
+                .addComponent(empty_cart_button, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(60, 60, 60)
+                .addComponent(finalze_button, javax.swing.GroupLayout.PREFERRED_SIZE, 515, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         button_panel1Layout.setVerticalGroup(
             button_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(button_panel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(button_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(transaction_jbutton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(admin_jbutton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(button_panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(menu_jbutton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(add_to_cart_jbutton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(enter_coupon_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(finalze_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(enter_code_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(empty_cart_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         button_panel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        jLabel1.setText("Subtotal:");
+        subtotal_label.setText("Subtotal:");
 
-        jLabel3.setText("Taxes:");
+        taxes_label.setText("Taxes:");
 
-        jLabel4.setText("Coupons:");
+        coupons_label.setText("Coupons:");
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel5.setText("Total:");
+        total_label.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        total_label.setText("Total:");
 
-        jLabel6.setText("$00.00");
+        subtotal_variable.setText("00.00");
 
-        jLabel7.setText("$00.00");
+        coupons_variable.setText("00.00");
 
-        jLabel8.setText("$00.00");
+        taxes_variable.setText("00.00");
 
-        jLabel9.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel9.setText("$00.00");
+        total_variable.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        total_variable.setText("00.00");
 
         javax.swing.GroupLayout button_panel2Layout = new javax.swing.GroupLayout(button_panel2);
         button_panel2.setLayout(button_panel2Layout);
@@ -183,17 +268,17 @@ public class TransactionsPanel extends javax.swing.JPanel {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, button_panel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(button_panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel1))
+                    .addComponent(total_label)
+                    .addComponent(coupons_label)
+                    .addComponent(taxes_label)
+                    .addComponent(subtotal_label))
                 .addGap(66, 66, 66)
                 .addGroup(button_panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(button_panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel6)
-                        .addComponent(jLabel7)
-                        .addComponent(jLabel8))
-                    .addComponent(jLabel9))
+                        .addComponent(subtotal_variable)
+                        .addComponent(coupons_variable)
+                        .addComponent(taxes_variable))
+                    .addComponent(total_variable))
                 .addGap(30, 30, 30))
         );
         button_panel2Layout.setVerticalGroup(
@@ -201,103 +286,41 @@ public class TransactionsPanel extends javax.swing.JPanel {
             .addGroup(button_panel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(button_panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel6))
+                    .addComponent(subtotal_label)
+                    .addComponent(subtotal_variable))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(button_panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel8))
+                    .addComponent(taxes_label)
+                    .addComponent(taxes_variable))
                 .addGap(18, 18, 18)
                 .addGroup(button_panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel7))
+                    .addComponent(coupons_label)
+                    .addComponent(coupons_variable))
                 .addGap(18, 18, 18)
                 .addGroup(button_panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel9))
+                    .addComponent(total_label)
+                    .addComponent(total_variable))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jScrollPane1.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        transaction_table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][]
+            {
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel2.setText("Product 1");
-
-        jPanel3.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 48)); // NOI18N
-        jLabel10.setText("X");
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(30, 30, 30)
-                .addComponent(jLabel10)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel10)
-                .addGap(28, 28, 28))
-        );
-
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
-        jLabel11.setText("$00.00");
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(127, 127, 127)
-                .addComponent(jLabel11)
-                .addGap(58, 58, 58))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(40, 40, 40)
-                        .addComponent(jLabel2))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addComponent(jLabel11)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jScrollPane1.setViewportView(jPanel1);
+            },
+            new String []
+            {
+                "Item Code", "Item Name", "Type", "Price", ""
+            }
+        ));
+        transaction_table.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseClicked(java.awt.event.MouseEvent evt)
+            {
+                transaction_tableMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(transaction_table);
 
         javax.swing.GroupLayout product_table_jpanelLayout = new javax.swing.GroupLayout(product_table_jpanel);
         product_table_jpanel.setLayout(product_table_jpanelLayout);
@@ -305,20 +328,19 @@ public class TransactionsPanel extends javax.swing.JPanel {
             product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(product_table_jpanelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(product_table_jpanelLayout.createSequentialGroup()
-                        .addComponent(button_panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(button_panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(button_panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(button_panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addGroup(product_table_jpanelLayout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 1528, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         product_table_jpanelLayout.setVerticalGroup(
             product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, product_table_jpanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 816, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
                 .addGroup(product_table_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(button_panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(button_panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -352,32 +374,40 @@ public class TransactionsPanel extends javax.swing.JPanel {
 
         product_name_jbutton.setText("Product Name: ");
 
-        product_name_textfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        product_name_textfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 product_name_textfieldActionPerformed(evt);
             }
         });
 
         quantity_jlabel.setText("Qty :");
 
-        quantity_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        quantity_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 quantity_jtextfieldActionPerformed(evt);
             }
         });
 
         price_jlabel.setText("Price :");
 
-        price_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        price_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 price_jtextfieldActionPerformed(evt);
             }
         });
 
         category_jlabel.setText("Category :");
 
-        category_jtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        category_jtextfield.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 category_jtextfieldActionPerformed(evt);
             }
         });
@@ -386,24 +416,29 @@ public class TransactionsPanel extends javax.swing.JPanel {
 
         description_jtextarea.setColumns(20);
         description_jtextarea.setRows(5);
+        description_jtextarea.setWrapStyleWord(true);
         description_jscrollpane.setViewportView(description_jtextarea);
 
         size_label.setText("Size :");
 
         button_panel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
-        transaction_jbutton.setText("Inventory");
-        transaction_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                transaction_jbuttonActionPerformed(evt);
+        inventory_button.setText("Inventory");
+        inventory_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                inventory_buttonActionPerformed(evt);
             }
         });
 
         admin_jbutton.setText("Admin");
 
         menu_jbutton.setText("Menu");
-        menu_jbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+        menu_jbutton.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
                 menu_jbuttonActionPerformed(evt);
             }
         });
@@ -415,7 +450,7 @@ public class TransactionsPanel extends javax.swing.JPanel {
             .addGroup(button_panelLayout.createSequentialGroup()
                 .addGap(35, 35, 35)
                 .addGroup(button_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(transaction_jbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(inventory_button, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(menu_jbutton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(admin_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -427,60 +462,75 @@ public class TransactionsPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(button_panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(admin_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(transaction_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(inventory_button, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(menu_jbutton, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32))
         );
+
+        removeitem_button.setBackground(new java.awt.Color(255, 0, 0));
+        removeitem_button.setText("Remove Item");
+        removeitem_button.addActionListener(new java.awt.event.ActionListener()
+        {
+            public void actionPerformed(java.awt.event.ActionEvent evt)
+            {
+                removeitem_buttonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout product_jpanelLayout = new javax.swing.GroupLayout(product_jpanel);
         product_jpanel.setLayout(product_jpanelLayout);
         product_jpanelLayout.setHorizontalGroup(
             product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(product_jpanelLayout.createSequentialGroup()
-                .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(product_jpanelLayout.createSequentialGroup()
-                        .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(product_name_jbutton)
-                            .addComponent(product_jlabel))
-                        .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(product_jpanelLayout.createSequentialGroup()
-                                .addGap(34, 34, 34)
-                                .addComponent(icon_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(product_jpanelLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(product_name_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(product_id_textfield, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(product_jpanelLayout.createSequentialGroup()
-                        .addComponent(description_jlabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(description_jscrollpane)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(product_jpanelLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(category_jlabel)
-                    .addComponent(quantity_jlabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(product_jpanelLayout.createSequentialGroup()
-                        .addComponent(category_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(size_label)
+                        .addContainerGap()
+                        .addComponent(button_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, product_jpanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(category_jlabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(size_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(product_jpanelLayout.createSequentialGroup()
-                        .addComponent(quantity_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(33, 33, 33)
-                        .addComponent(price_jlabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(price_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(43, 43, 43))
-            .addGroup(product_jpanelLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(button_panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(category_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(product_jpanelLayout.createSequentialGroup()
+                            .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(product_name_jbutton)
+                                .addComponent(product_jlabel))
+                            .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(product_jpanelLayout.createSequentialGroup()
+                                    .addGap(34, 34, 34)
+                                    .addComponent(icon_jpanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(product_jpanelLayout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(product_name_textfield, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE)
+                                        .addComponent(product_id_textfield)))))
+                        .addGroup(product_jpanelLayout.createSequentialGroup()
+                            .addContainerGap()
+                            .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(quantity_jlabel)
+                                .addComponent(description_jlabel)
+                                .addComponent(price_jlabel)
+                                .addComponent(size_label))
+                            .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(product_jpanelLayout.createSequentialGroup()
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(description_jscrollpane, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE))
+                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, product_jpanelLayout.createSequentialGroup()
+                                    .addGap(20, 20, 20)
+                                    .addComponent(size_jtextfield))
+                                .addGroup(product_jpanelLayout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addComponent(quantity_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(price_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(0, 0, Short.MAX_VALUE))))))
                 .addContainerGap())
+            .addGroup(product_jpanelLayout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addComponent(removeitem_button, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         product_jpanelLayout.setVerticalGroup(
             product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -498,21 +548,26 @@ public class TransactionsPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(category_jlabel)
-                    .addComponent(category_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(category_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(size_label)
                     .addComponent(size_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(price_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(quantity_jlabel)
-                        .addComponent(quantity_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(price_jlabel)))
+                .addGap(18, 18, 18)
+                .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(price_jlabel)
+                    .addComponent(price_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(quantity_jlabel)
+                    .addComponent(quantity_jtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(product_jpanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(description_jlabel)
                     .addComponent(description_jscrollpane, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(removeitem_button, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 249, Short.MAX_VALUE)
                 .addComponent(button_panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -565,76 +620,240 @@ public class TransactionsPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void transaction_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transaction_jbuttonActionPerformed
+    private void inventory_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inventory_buttonActionPerformed
         CardLayout card = (CardLayout)this.getParent().getLayout();
         card.show(this.getParent(), "inventoryManagementPanel");
-    }//GEN-LAST:event_transaction_jbuttonActionPerformed
+    }//GEN-LAST:event_inventory_buttonActionPerformed
 
     private void menu_jbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_jbuttonActionPerformed
         CardLayout card = (CardLayout)this.getParent().getLayout();
         card.show(this.getParent(), "launcherMenuPanel");
     }//GEN-LAST:event_menu_jbuttonActionPerformed
 
-    private void transaction_jbutton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_transaction_jbutton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_transaction_jbutton1ActionPerformed
+    private void enter_code_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enter_code_buttonActionPerformed
+   
+        String item_code = JOptionPane.showInputDialog(item_popup, "Enter Item Code",null);
+        
+        if (item_code != null) {
+            inventory_accessor.getProduct(item_code);
+            threadRecipt();
+        }
 
-    private void menu_jbutton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menu_jbutton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_menu_jbutton1ActionPerformed
+    }//GEN-LAST:event_enter_code_buttonActionPerformed
+
+    private void enter_coupon_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_enter_coupon_buttonActionPerformed
+        
+    }//GEN-LAST:event_enter_coupon_buttonActionPerformed
 
     private void product_name_textfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_product_name_textfieldActionPerformed
-        // TODO add your handling code here:
+       
     }//GEN-LAST:event_product_name_textfieldActionPerformed
 
     private void quantity_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_quantity_jtextfieldActionPerformed
-        // TODO add your handling code here:
+      
     }//GEN-LAST:event_quantity_jtextfieldActionPerformed
 
     private void price_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_price_jtextfieldActionPerformed
-        // TODO add your handling code here:
+ 
     }//GEN-LAST:event_price_jtextfieldActionPerformed
 
     private void category_jtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_category_jtextfieldActionPerformed
-        // TODO add your handling code here:
+     
     }//GEN-LAST:event_category_jtextfieldActionPerformed
 
+    private void empty_cart_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_empty_cart_buttonActionPerformed
+        delete=true;
+        model = (DefaultTableModel) transaction_table.getModel();
+        model.setRowCount(0);
+        subtotal=0;
+        tax=0;
+        total=0;
+        subtotal_variable.setText("00.00");
+        taxes_variable.setText("00.00");
+        total_variable.setText("00.00");
+        delete=false;
+    }//GEN-LAST:event_empty_cart_buttonActionPerformed
 
+    private void removeitem_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeitem_buttonActionPerformed
+
+        DefaultTableModel model = (DefaultTableModel) transaction_table.getModel();
+        int current_selected_row = transaction_table.getSelectedRow();
+
+        String product_id = (String) transaction_table.getValueAt(current_selected_row, 0);
+        product_cart.remove(current_selected_row);
+
+        product_id_textfield.setText("");
+        category_jtextfield.setText("");
+        product_name_textfield.setText("");
+        description_jtextarea.setText("");
+        size_jtextfield.setText("");
+        price_jtextfield.setText("");
+        quantity_jtextfield.setText("");
+        removeitem_button.setVisible(false);
+        double subtotal = 0.00;
+        double tax =0.00;
+        double total = 0.00;
+        
+        for (Product record : product_cart)
+        {
+            subtotal = subtotal + record.getPrice();
+            tax = tax + (record.getPrice() * 0.07);
+            total = subtotal + tax;
+        }
+
+         subtotal_variable.setText(Double.toString(subtotal));
+         total_variable.setText(Double.toString(total));
+         taxes_variable.setText(Double.toString(tax));
+        
+
+        model.removeRow(current_selected_row);
+
+    }//GEN-LAST:event_removeitem_buttonActionPerformed
+
+    private void finalze_buttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_finalze_buttonActionPerformed
+        trans_date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+        trans_id="00001";
+        trans_payment="CASH";
+        trans_tax = Double.parseDouble(taxes_variable.getText());
+        trans_total = Double.parseDouble(total_variable.getText());
+        
+        
+        Transaction trans = new Transaction();
+        trans.setTransactionId(trans_id);
+        trans.setTransactionDate(trans_date);
+        trans.setTotal(trans_total);
+        trans.setTax(trans_tax);
+        trans.setPaymentType(trans_payment);
+        transaction_accessor.addTransaction(trans);     
+
+        HashMap<String, Purchased> productsPurchased = new HashMap<>();
+                
+        for (int row=0; row < transaction_table.getRowCount(); row++){
+                        
+            if(productsPurchased.containsKey((String) transaction_table.getValueAt(row,0))){
+                //get Purchased from HashMap
+                Purchased updatePurchase;
+                updatePurchase = productsPurchased.get((String) transaction_table.getValueAt(row,0));
+                
+                //set new quantity for Purchased
+                updatePurchase.setQuantity((int) updatePurchase.getQuantity()+1);
+                
+                //replace Purchased in HashMap
+                productsPurchased.replace((String) transaction_table.getValueAt(row,0), updatePurchase);
+            }
+            else {
+                //create new Purchased
+                Purchased newPurchase = new Purchased();
+                newPurchase.setProdID((String) transaction_table.getValueAt(row,0));
+                newPurchase.setTransID(trans_id);
+                newPurchase.setPrice((double) transaction_table.getValueAt(row,3));
+                newPurchase.setQuantity(1);
+                
+                //insert key and Purchased into HashMap
+                productsPurchased.put((String) transaction_table.getValueAt(row,0), newPurchase);
+                
+            }  
+        }
+        
+        for(Map.Entry<String, Purchased > entry : productsPurchased.entrySet()) {
+            String key = entry.getKey();
+            Purchased finalPurchase = entry.getValue();
+            System.out.println(finalPurchase.getProdID());
+            System.out.println(finalPurchase.getTransID());
+            System.out.println(finalPurchase.getPrice());
+            System.out.println(finalPurchase.getQuantity());
+            
+            //DB query using returned value
+            transaction_accessor.addPurchase(finalPurchase);
+        }      
+        
+        delete=true;
+        DefaultTableModel model = (DefaultTableModel) transaction_table.getModel();
+        model.setRowCount(0);
+        subtotal=0;
+        tax=0;
+        total=0;
+        subtotal_variable.setText("$00.00");
+        taxes_variable.setText("$00.00");
+        total_variable.setText("$00.00");
+        productsPurchased.clear();
+        delete=false;
+    }//GEN-LAST:event_finalze_buttonActionPerformed
+
+    private void transaction_tableMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_transaction_tableMouseClicked
+    {//GEN-HEADEREND:event_transaction_tableMouseClicked
+        int current_selected_row = transaction_table.getSelectedRow();
+
+        String product_id = (String) transaction_table.getValueAt(current_selected_row, 0);
+
+        for (Product record : product_cart)
+        {
+            if (product_id.compareTo(record.getProductId())==0)
+            {
+                product_id_textfield.setText(record.getProductId());
+                category_jtextfield.setText(record.getCategory());
+                product_name_textfield.setText(record.getProductName());
+                description_jtextarea.setText(record.getDescription());
+                size_jtextfield.setText(record.getSize());
+                price_jtextfield.setText(String.valueOf(record.getPrice()));
+                quantity_jtextfield.setText(String.valueOf(record.getQuantity()));
+                break;
+            }
+        }
+        removeitem_button.setVisible(true);
+    }//GEN-LAST:event_transaction_tableMouseClicked
+
+    private void threadRecipt()
+    {
+       System.out.println("THREAD RECEIPT");
+       worker = new TransactionThreadWorker(this,subtotal_variable, total_variable, taxes_variable,socket,ios,oos,model,
+                                            Double.parseDouble(subtotal_variable.getText()),
+               Double.parseDouble(total_variable.getText()),
+               Double.parseDouble(taxes_variable.getText()),
+               product_cart);
+       worker.execute();
+    }    
+    
+    public void setSubTotalLabel(double new_sub)
+    {
+       subtotal_label.setText(Double.toString(new_sub));
+    }
+
+    public void setTotalLabel(double new_total)
+    {
+       total_label.setText(Double.toString(new_total));
+    }
+    public void setTaxLabel(double new_tax)
+    {
+       taxes_label.setText(Double.toString(new_tax));
+    }
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton add_to_cart_jbutton1;
     private javax.swing.JButton admin_jbutton;
-    private javax.swing.JButton admin_jbutton2;
     private javax.swing.JPanel button_panel;
     private javax.swing.JPanel button_panel1;
     private javax.swing.JPanel button_panel2;
     private javax.swing.JLabel category_jlabel;
     private javax.swing.JTextField category_jtextfield;
     private javax.swing.JLabel company_name_label;
+    private javax.swing.JLabel coupons_label;
+    private javax.swing.JLabel coupons_variable;
     private javax.swing.JLabel description_jlabel;
     private javax.swing.JScrollPane description_jscrollpane;
     private javax.swing.JTextArea description_jtextarea;
+    private javax.swing.JButton empty_cart_button;
+    private javax.swing.JButton enter_code_button;
+    private javax.swing.JButton enter_coupon_button;
+    private javax.swing.JButton finalze_button;
     private javax.swing.JLabel icon_jLabel;
     private javax.swing.JPanel icon_jpanel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
+    private javax.swing.JButton inventory_button;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel loco_icon_panel;
     private javax.swing.JLabel logo_jlabel;
     private javax.swing.JPanel logo_jpanel;
     private javax.swing.JButton menu_jbutton;
-    private javax.swing.JButton menu_jbutton1;
     private javax.swing.JLabel price_jlabel;
     private javax.swing.JTextField price_jtextfield;
     private javax.swing.JTextField product_id_textfield;
@@ -645,9 +864,15 @@ public class TransactionsPanel extends javax.swing.JPanel {
     private javax.swing.JPanel product_table_jpanel;
     private javax.swing.JLabel quantity_jlabel;
     private javax.swing.JTextField quantity_jtextfield;
+    private javax.swing.JButton removeitem_button;
     private javax.swing.JTextField size_jtextfield;
     private javax.swing.JLabel size_label;
-    private javax.swing.JButton transaction_jbutton;
-    private javax.swing.JButton transaction_jbutton1;
+    private javax.swing.JLabel subtotal_label;
+    private javax.swing.JLabel subtotal_variable;
+    private javax.swing.JLabel taxes_label;
+    private javax.swing.JLabel taxes_variable;
+    private javax.swing.JLabel total_label;
+    private javax.swing.JLabel total_variable;
+    private javax.swing.JTable transaction_table;
     // End of variables declaration//GEN-END:variables
 }
