@@ -68,7 +68,7 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
     @Override
     public void getProduct(String product_id_number)
     {
-            String query = "SELECT * FROM Product Where product_id = '" +
+        String query = "SELECT * FROM Product Where product_id = '" +
                     product_id_number + "'";
         executeSql(query);
     }

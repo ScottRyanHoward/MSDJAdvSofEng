@@ -16,62 +16,58 @@ import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import javax.swing.JTextField;
+import javax.swing.JComboBox;
 import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
-import main.structures.Transaction;
+import main.structures.TransactionProduct;
 
 /**
  * description - used to start threads and update the gui
  *
  */
-public class SalesThreadWorker extends SwingWorker<DefaultTableModel, ArrayList<Transaction>>
+public class SalesProductWorker extends SwingWorker<DefaultTableModel, ArrayList<TransactionProduct>>
 {
     //initialize varibles
-    ArrayList<Transaction> list = new ArrayList();
+    ArrayList<TransactionProduct> list = new ArrayList();
     private ObjectInputStream ios = null;
     private ObjectOutputStream oos = null;
     private Socket s;
-    JTextField total_sales; 
-    JTextField avg_sales;
-    JTextField num_of_items;
+    JComboBox product_box;
     DefaultTableModel model;
     //Executor service
     private ExecutorService exec;
 
-    public SalesThreadWorker(Socket new_socket, ObjectInputStream new_ios,
-            ObjectOutputStream new_oos, DefaultTableModel new_model,
-            JTextField total_sales, JTextField avg_sales, JTextField num_of_items)
+    public SalesProductWorker(Socket new_socket, ObjectInputStream new_ios,
+            ObjectOutputStream new_oos, DefaultTableModel new_model, JComboBox product_box)
     {
         this.ios = new_ios;
         this.oos = new_oos;
         this.s = new_socket;
         this.model = new_model;
-        this.num_of_items = num_of_items;
-        this.avg_sales = avg_sales;
-        this.total_sales = total_sales;
+        this.product_box = product_box;
     }
 
     @Override
     protected DefaultTableModel doInBackground() throws Exception
     {
-        Callable<ArrayList<Transaction>> load_product_task 
-                = new Callable<ArrayList<Transaction>>()
+        Callable<ArrayList<TransactionProduct>> load_product_task 
+                = new Callable<ArrayList<TransactionProduct>>()
         {
             @Override
-            public ArrayList<Transaction> call() throws Exception
+            public ArrayList<TransactionProduct> call() throws Exception
             {
-                System.out.println("Transaction CALL FUNCTION");
+                System.out.println("Sales Product worker CALL FUNCTION");
                 return loadTransaction();
             }
 
-            private ArrayList<Transaction> loadTransaction()
+            private ArrayList<TransactionProduct> loadTransaction()
             {
 
-                ArrayList<Transaction> albums = new ArrayList();
+                ArrayList<TransactionProduct> albums = new ArrayList();
                 try
                 {
-                    albums = (ArrayList<Transaction>) ios.readObject();
+                    albums = (ArrayList<TransactionProduct>) ios.readObject();
+
                 }
                 catch (Exception e)
                 {
@@ -84,11 +80,11 @@ public class SalesThreadWorker extends SwingWorker<DefaultTableModel, ArrayList<
         exec = Executors.newFixedThreadPool(10);
 
         //completion service to organize the threads
-        final CompletionService<ArrayList<Transaction>> service
+        final CompletionService<ArrayList<TransactionProduct>> service
                 = new ExecutorCompletionService<>(exec);
 
         service.submit(load_product_task);
-        final Future<ArrayList<Transaction>> future = service.take();
+        final Future<ArrayList<TransactionProduct>> future = service.take();
         publish(future.get());
 
         exec.shutdown();
@@ -96,36 +92,45 @@ public class SalesThreadWorker extends SwingWorker<DefaultTableModel, ArrayList<
     }
 
     @Override
-    protected void process(List<ArrayList<Transaction>> chunks)
+    protected void process(List<ArrayList<TransactionProduct>> chunks)
     {
-        double total_sales_calc = 0.0;
-        double avg_sales_calc = 0.0;
-        int items =0;
-        
         model.setNumRows(0);
+        ArrayList<String>product_list = new ArrayList();
+        product_box.removeAllItems();
+        product_box.addItem("ALL");
+       
         if (!chunks.get(0).isEmpty())
         {
-            items = chunks.get(0).size();
-            for (Transaction record : chunks.get(0))
+            for (TransactionProduct record : chunks.get(0))
             {
                 Object[] row =
                 {
-                    record.getTransactionDate(),
                     record.getTransactionId(),
-                    record.getTax(),
-                    record.getTotal()
+                    record.getProductId(),
+                    record.getProductName(),
+                    record.getCategory(),
+                    record.getPrice(),
+                    record.getQuantity()
                 };
                 model.addRow(row);
-                total_sales_calc += record.getTotal();
+                
+                int count =0;
+                for(String product : product_list)
+                {
+                  if (product.compareTo(record.getProductName()) == 0)
+                  {
+                    count++;
+                  }
+                }                
+                if(count == 0)
+                    product_list.add(record.getProductName());
             }
-            avg_sales_calc = total_sales_calc / items;
-        }
-        else
-            model.setRowCount(0);
-        num_of_items.setText(Integer.toString(items));
-        avg_sales.setText(Double.toString(avg_sales_calc));
-        total_sales.setText(Double.toString(total_sales_calc));
-        
+             
+            for(String product : product_list)
+            {
+               product_box.addItem(product);
+            }
+        }        
     }
 
     @Override
