@@ -60,7 +60,14 @@ public class TransactionImpl implements TransactionInterface_I
             "'" + new_purchase.getTransID() + "' ," +
             "'" + new_purchase.getProdID() + "' ," +
             "'" + new_purchase.getPrice() + "' ," +
-            "'" + new_purchase.getQuantity()+"' )" ;
-            executeSql(query);            
+            "'" + new_purchase.getQuantity()+"' );" ;
+            
+            String update = " UPDATE Product " +
+                            "SET quantity = quantity - 1 " +
+                            "WHERE product_id = '" +new_purchase.getProdID() +
+                            "' and quantity > 0;";
+                                
+            executeSql(query);   
+            executeSql(update); 
     }    
 }

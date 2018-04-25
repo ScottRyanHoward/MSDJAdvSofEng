@@ -43,7 +43,17 @@ public class InventoryImpl implements main.interfaces.InventoryInterfaceForManag
     @Override
     public void updateProduct(Product update_product_id)
     {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                String query = "UPDATE Product " + "SET "
+                + "product_id = '" + update_product_id.getProductId() + "' ,"
+                + "product_name = '" + update_product_id.getProductName() + "' ,"
+                + "description = '" + update_product_id.getDescription() + "' ,"
+                + "price = '" + update_product_id.getPrice() + "' ,"
+                + "size = '" + update_product_id.getSize() + "' ,"
+                + "quantity = '" + update_product_id.getQuantity() + "' ,"
+                + "category = '" + update_product_id.getCategory() + "' "
+                + "WHERE product_id = '" + update_product_id.getProductId() +"'";
+                System.out.println(query);
+      executeSql(query);
     }
 
     @Override

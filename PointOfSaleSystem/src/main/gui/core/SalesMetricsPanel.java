@@ -10,6 +10,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -19,6 +20,7 @@ import java.util.Locale;
 import java.util.Map;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -38,6 +40,7 @@ import main.interfaces.SalesInterface_I;
 import main.structures.Product;
 import main.threadworkers.SalesProductWorker;
 import main.threadworkers.SalesThreadWorker;
+
 /**
  *
  * @author Dakota
@@ -57,13 +60,14 @@ public class SalesMetricsPanel extends javax.swing.JPanel
     ObjectInputStream sales_ios = null;
     private Socket sales_socket;
     SalesThreadWorker sales_worker;
-    
+
     private SalesInterface_I sales_product_accessor;
 
     ObjectOutputStream sales_product_oos = null;
     ObjectInputStream sales_product_ios = null;
     private Socket sales_product_socket;
     SalesProductWorker sales_product_worker;
+
     /**
      * Creates new form SalesMetricsPanel
      *
@@ -74,7 +78,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel
      */
     public SalesMetricsPanel(SalesInterface_I in_sales_accessor, Socket s,
             ObjectOutputStream new_oos, ObjectInputStream new_ios,
-            SalesInterface_I in_sales_product_accessor,Socket s_product,
+            SalesInterface_I in_sales_product_accessor, Socket s_product,
             ObjectOutputStream new_product_oos, ObjectInputStream new_product_ios)
     {
         initComponents();
@@ -87,10 +91,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel
             }
         };
         category_combobox.addItem("ALL");
-        
-        for(String cat : product.category_array)
+
+        for (String cat : product.category_array)
         {
-          category_combobox.addItem(cat);
+            category_combobox.addItem(cat);
         }
         product_combo.addItem("");
         transaction_model.addColumn("Date");
@@ -107,36 +111,36 @@ public class SalesMetricsPanel extends javax.swing.JPanel
                 return false;
             }
         };
-        
+
         product_model.addColumn("TransId");
         product_model.addColumn("Product Id");
         product_model.addColumn("Product Name");
         product_model.addColumn("Category");
         product_model.addColumn("Product_Price");
         product_model.addColumn("Quantity");
-        product_table.setModel(product_model);  
-        
+        product_table.setModel(product_model);
+
         sales_accessor = in_sales_accessor;
         sales_socket = s;
         sales_ios = new_ios;
         sales_oos = new_oos;
-        
+
         sales_product_socket = s_product;
         sales_product_ios = new_product_ios;
         sales_product_oos = new_product_oos;
         sales_product_accessor = in_sales_product_accessor;
-        
+
         displayAllSales();
         displayAllProcuctSales();
     }
 
     private void displayTodayData()
     {
-     	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-	String date = sdf.format(new Date()); 
-  
-        String query = " SELECT  * FROM Product_sales WHERE "
-                + "From_transaction_date >= '" + date + "'";
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String date = sdf.format(new Date());
+
+        String query = " SELECT  * FROM transaction WHERE "
+                + "transaction_date >= '" + date + "'";
 
         sales_accessor.searchSales(query);
         salesThreadRecipt();
@@ -154,7 +158,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel
         Calendar c = GregorianCalendar.getInstance();
         // Set the calendar to monday of the current week
         c.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-         // Print dates of the current week starting on Monday
+        // Print dates of the current week starting on Monday
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String startDate = "", endDate = "";
 
@@ -162,10 +166,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel
         c.add(Calendar.DATE, 6);
         endDate = df.format(c.getTime());
 
-        String query = " SELECT  * FROM Product_sales WHERE From_date >= '"
-                + startDate + "' AND To_date <= '"
+        String query = " SELECT  * FROM Transaction WHERE transaction_date >= '"
+                + startDate + "' AND transaction_date <= '"
                 + endDate + "'";
- 
+
         sales_accessor.searchSales(query);
         salesThreadRecipt();
     }
@@ -180,25 +184,25 @@ public class SalesMetricsPanel extends javax.swing.JPanel
         }
 
         String query = "Select * from Transaction where "
-                + "substring(transaction_date,6,2) = '" + month + "'";
+                + "MONTH(transaction_date) = '" + month + "'";
         sales_accessor.searchSales(query);
         salesThreadRecipt();
     }
 
     private void displayAllProcuctSales()
     {
-       System.out.println("displayAllProcuctSales");
-       String query = "Select purchased_in.* , Product.Category, Product.product_name From purchased_in " +
-                    ", Product where purchased_in.product_id = product.product_id";    
-       sales_product_accessor.searchSales(query);   
-       productSalesThreadRecipt();
+        System.out.println("displayAllProcuctSales");
+        String query = "Select purchased_in.* , Product.Category, Product.product_name From purchased_in "
+                + ", Product where purchased_in.product_id = product.product_id";
+        sales_product_accessor.searchSales(query);
+        productSalesThreadRecipt();
     }
-    
+
     private void displayThisYearData()
     {
         int year = Calendar.getInstance().get(Calendar.YEAR);
-        String query = "Select * from Transaction where "
-                + "substring(transaction_date,1,4) = '" + year + "'";
+        String query = "Select * from transaction where "
+                + "YEAR(transaction_date) = '" + year + "'";
         sales_accessor.searchSales(query);
         salesThreadRecipt();
     }
@@ -206,17 +210,17 @@ public class SalesMetricsPanel extends javax.swing.JPanel
     private void salesThreadRecipt()
     {
         System.out.println("THREAD RECEIPT");
-        sales_worker = new SalesThreadWorker(sales_socket, sales_ios, sales_oos, transaction_model,total_sales,avg_sales,items_sold);
+        sales_worker = new SalesThreadWorker(sales_socket, sales_ios, sales_oos, transaction_model, total_sales, avg_sales, items_sold);
         sales_worker.execute();
     }
 
     private void productSalesThreadRecipt()
     {
         System.out.println("Product Sales THREAD RECEIPT");
-        sales_product_worker = new SalesProductWorker(sales_product_socket, sales_product_ios, sales_product_oos, product_model,product_combo);
+        sales_product_worker = new SalesProductWorker(sales_product_socket, sales_product_ios, sales_product_oos, product_model, product_combo);
         sales_product_worker.execute();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -233,8 +237,8 @@ public class SalesMetricsPanel extends javax.swing.JPanel
         TODAY = new javax.swing.JRadioButton();
         WEEK = new javax.swing.JRadioButton();
         MONTH = new javax.swing.JRadioButton();
-        StartDate = new javax.swing.JTextField();
-        EndDate = new javax.swing.JTextField();
+        start_date_field = new javax.swing.JTextField();
+        end_date_field = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         YEAR = new javax.swing.JRadioButton();
@@ -331,19 +335,19 @@ public class SalesMetricsPanel extends javax.swing.JPanel
             }
         });
 
-        StartDate.addActionListener(new java.awt.event.ActionListener()
+        start_date_field.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                StartDateActionPerformed(evt);
+                start_date_fieldActionPerformed(evt);
             }
         });
 
-        EndDate.addActionListener(new java.awt.event.ActionListener()
+        end_date_field.addActionListener(new java.awt.event.ActionListener()
         {
             public void actionPerformed(java.awt.event.ActionEvent evt)
             {
-                EndDateActionPerformed(evt);
+                end_date_fieldActionPerformed(evt);
             }
         });
 
@@ -382,11 +386,11 @@ public class SalesMetricsPanel extends javax.swing.JPanel
                 .addGap(14, 14, 14)
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(StartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(start_date_field, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
                 .addGap(27, 27, 27)
-                .addComponent(EndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(end_date_field, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
                 .addContainerGap())
@@ -415,9 +419,9 @@ public class SalesMetricsPanel extends javax.swing.JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(StartDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(start_date_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6)
-                    .addComponent(EndDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(end_date_field, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1)))
         );
 
@@ -1015,13 +1019,13 @@ public class SalesMetricsPanel extends javax.swing.JPanel
         displayThisYearData();
     }//GEN-LAST:event_YEARActionPerformed
 
-    private void StartDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_StartDateActionPerformed
+    private void start_date_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_start_date_fieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_StartDateActionPerformed
+    }//GEN-LAST:event_start_date_fieldActionPerformed
 
-    private void EndDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EndDateActionPerformed
+    private void end_date_fieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_end_date_fieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_EndDateActionPerformed
+    }//GEN-LAST:event_end_date_fieldActionPerformed
 
     private void TotalRevenueCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TotalRevenueCalculateActionPerformed
 
@@ -1058,8 +1062,37 @@ public class SalesMetricsPanel extends javax.swing.JPanel
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jButton1ActionPerformed
     {//GEN-HEADEREND:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String start_date = start_date_field.getText();
+        String end_date = end_date_field.getText();
+
+        if (isValidDate(start_date) && isValidDate(end_date))
+        {
+            String query = " SELECT  * FROM Transaction WHERE transaction_date >= '"
+                    + start_date + "' AND transaction_date <= '"
+                    + end_date + "'";
+            sales_accessor.searchSales(query);
+            salesThreadRecipt();
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    public static boolean isValidDate(String inDate)
+    {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        try
+        {
+            dateFormat.parse(inDate.trim());
+        }
+        catch (ParseException pe)
+        {
+            JOptionPane.showMessageDialog(new JFrame(),
+                    "Please enter in a valide date range the format is yyyy-mm-dd",
+                    "Date error",
+                    JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
+        return true;
+    }
 
     private void product_comboActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_product_comboActionPerformed
     {//GEN-HEADEREND:event_product_comboActionPerformed
@@ -1085,7 +1118,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel
         {
             System.out.println("GOT HERE");
             displayAllProcuctSales();
-            
+
         }
         else
         {
@@ -1111,12 +1144,10 @@ public class SalesMetricsPanel extends javax.swing.JPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextField EndDate;
     private javax.swing.JButton GrossMarginCalculate;
     private javax.swing.JRadioButton MONTH;
     private javax.swing.JButton MenuLauncher;
     private javax.swing.JButton NetProfitMarginCalcuate;
-    private javax.swing.JTextField StartDate;
     private javax.swing.JRadioButton TODAY;
     private javax.swing.JButton TotalRevenueCalculate;
     private javax.swing.JRadioButton WEEK;
@@ -1130,6 +1161,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel
     private javax.swing.JTextField costOfGoodsSold;
     private javax.swing.JTextField costOfReturns;
     private javax.swing.JTextField currentLiabilities;
+    private javax.swing.JTextField end_date_field;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JTextField grossMargin;
     private javax.swing.JTextField items_sold;
@@ -1175,6 +1207,7 @@ public class SalesMetricsPanel extends javax.swing.JPanel
     private javax.swing.JComboBox<String> product_combo;
     private javax.swing.JTable product_table;
     private javax.swing.JTextField salesExpenses;
+    private javax.swing.JTextField start_date_field;
     private javax.swing.JTextField totalRevenue;
     private javax.swing.JTextField totalSalesIncome;
     private javax.swing.JTextField totalSalesRevenue;
