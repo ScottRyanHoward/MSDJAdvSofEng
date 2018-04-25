@@ -113,11 +113,11 @@
                       <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
                       <Component id="jLabel7" min="-2" max="-2" attributes="0"/>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="StartDate" min="-2" pref="75" max="-2" attributes="0"/>
+                      <Component id="start_date_field" min="-2" pref="75" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
-                      <Component id="EndDate" min="-2" pref="75" max="-2" attributes="0"/>
+                      <Component id="end_date_field" min="-2" pref="75" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jButton1" pref="123" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -150,9 +150,9 @@
                       <EmptySpace pref="25" max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jLabel7" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="StartDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="start_date_field" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel6" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="EndDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="end_date_field" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -193,14 +193,14 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MONTHActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="StartDate">
+            <Component class="javax.swing.JTextField" name="start_date_field">
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="StartDateActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="start_date_fieldActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="EndDate">
+            <Component class="javax.swing.JTextField" name="end_date_field">
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EndDateActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="end_date_fieldActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel6">
