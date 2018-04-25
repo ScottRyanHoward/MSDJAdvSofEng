@@ -20,6 +20,7 @@ import java.util.logging.Logger;
 import main.structures.Employee;
 import main.structures.Product;
 import main.structures.Transaction;
+import main.structures.TransactionProduct;
 
 class ConnectionCW implements Runnable
 {
@@ -81,8 +82,7 @@ class ConnectionCW implements Runnable
             
             else
             {
-               output.writeObject(statement.execute(query));
-               
+               statement.execute(query);               
             }
         }
         catch (SQLException e)
@@ -101,7 +101,12 @@ class ConnectionCW implements Runnable
        {
         ResultSet result = statement.executeQuery(query);
         
-        if(query.contains("Product"))
+        
+        if (query.contains("purchased_in"))
+        {
+           packAndSendProductsPurchased(result);
+        }
+        else if(query.contains("Product"))
         {
            packAndSendProductResults(result);
         }
@@ -113,7 +118,9 @@ class ConnectionCW implements Runnable
         else if(query.contains("transaction"))
         {
            packAndSendTransactionResults(result);
-        }        
+        }   
+  
+        
        }
        catch(SQLException e)
        {
@@ -149,6 +156,37 @@ class ConnectionCW implements Runnable
         }
     }
     
+    private void packAndSendProductsPurchased(ResultSet result)
+    {
+        ArrayList<TransactionProduct> product_list = new ArrayList();
+        try
+        { 
+            if (null != result)
+            {
+
+                while (result.next())
+                {
+                    TransactionProduct product = new TransactionProduct();
+                    product.setTransacyionId(result.getString("purchased_in.transaction_id"));
+                    product.setProductId(result.getString("purchased_in.product_id"));
+                    product.setProductName(result.getString("Product.product_name"));
+                    product.setCategory(result.getString("Product.category"));
+                    product.setPrice(Double.parseDouble(result.getString("purchased_in.product_price")));
+                    product.setQuantity(Integer.parseInt(result.getString("purchased_in.amount_purchased")));
+                    product_list.add(product);
+                }
+            }
+        
+            output.writeObject(product_list);
+            output.flush();
+        }
+        catch (SQLException | IOException e)
+        {
+            System.out.println(e);
+        }
+    }
+    
+    
     private void packAndSendEmployeeResults(ResultSet result)
     {
         ArrayList<Employee> employee_list = new ArrayList();
@@ -167,6 +205,7 @@ class ConnectionCW implements Runnable
                     employee.setHours(Double.parseDouble(result.getString("hours")));
                     employee.setIsAdmin(Boolean.parseBoolean(result.getString("is_admin")));
                     employee.setWage(Double.parseDouble(result.getString("wage")));
+                    employee.setSsn(Integer.parseInt(result.getString("ssn")));
                     employee_list.add(employee);
                 }
             }
@@ -196,10 +235,9 @@ class ConnectionCW implements Runnable
                     transaction.setTransactionDate(result.getString("transaction_date"));
                     transaction.setTax(Double.parseDouble(result.getString("tax")));
                     transaction_list.add(transaction);
-                    System.out.println(transaction.getTransactionId());
-
                 }
             }
+            
             output.writeObject(transaction_list);
             output.flush();
         }

@@ -7,30 +7,39 @@ package main.structures;
 
 import java.io.Serializable;
 
-public class Product implements Serializable
+/**
+ *
+ * @author Matt HP
+ */
+public class TransactionProduct implements Serializable
 {
-    public String category_array[] =
-    {
-        "short-sleeve", "LONGSLEEVE", "BEANIE", "HAT",
-        "CREWNECK", "HOODIE", "PANTS"
-    };
-    
-    public String size_array[] =
-    {
-        "XSMALL", "SMALL", "MEDIUM", "LARGE", "XLARGE",
-        "M28","M29","M30","M31","M32","M33","M34","M36","M38","M40",
-        "W00","W0","W2","W4","W6","W8","W10","W12","W14"
-    };
     
     private String product_id;
     private String product_name;
-    private String description;
     private String category;
-    private String size;
     private double price;
     private int quantity;
-
+    private String transaction_id; 
+    
+    
     /**
+     * 
+     * @return the product_id
+     */
+    public String getTransactionId()
+    {
+        return transaction_id;
+    }
+  
+        /**
+     * @param transaction_id the transaction_id to set
+     */
+    public void setTransacyionId(String transaction_id)
+    {
+        this.transaction_id = transaction_id;
+    }
+    
+       /**
      * 
      * @return the product_id
      */
@@ -62,25 +71,9 @@ public class Product implements Serializable
     {
         this.product_name = product_name;
     }
-
+    
     /**
-     * @return the description
-     */
-    public String getDescription()
-    {
-        return description;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description)
-    {
-        this.description = description;
-    }
-
-    /**
-     * @return the category
+    * @return the category
      */
     public String getCategory()
     {
@@ -126,20 +119,5 @@ public class Product implements Serializable
     {
         this.quantity = quantity;
     }
-    
-        /**
-     * @return the quantity
-     */
-    public String getSize()
-    {
-        return size;
-    }
-
-    /**
-     * @param size the quantity to set
-     */
-    public void setSize(String size)
-    {
-        this.size = size;
-    }
+   
 }

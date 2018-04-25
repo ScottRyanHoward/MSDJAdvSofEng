@@ -46,7 +46,7 @@ public class InventoryManagementPanel extends javax.swing.JPanel
     Product product = new Product();
     DefaultTableModel model;
     TableRowSorter<TableModel> tr; 
-    ArrayList<Product> product_list;
+    ArrayList<Product>  product_list = new ArrayList();
     ArrayList<Product> search_product_list;
     InventoryThreadWorker worker;
     private Socket s;
@@ -97,8 +97,8 @@ public class InventoryManagementPanel extends javax.swing.JPanel
                 }
             });
          
-        inventory_accessor.getAllProducts();
-        threadRecipt();
+       inventory_accessor.getAllProducts();
+       threadRecipt();
           
         category_list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         size_list.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
@@ -172,7 +172,6 @@ public class InventoryManagementPanel extends javax.swing.JPanel
              inventory_accessor.searchProducts(query);
              product_jtable.clearSelection();
              threadRecipt();
-//            displayProducts(search_product_list);
         }         
     }
    
@@ -840,7 +839,7 @@ public class InventoryManagementPanel extends javax.swing.JPanel
     private void threadRecipt()
     {
        System.out.println("THREAD RECEIPT");
-       worker = new InventoryThreadWorker(s,ios,oos,model);
+       worker = new InventoryThreadWorker(s,ios,oos,model,product_list);
        worker.execute();
     }
     
