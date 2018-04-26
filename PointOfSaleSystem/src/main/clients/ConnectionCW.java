@@ -243,6 +243,7 @@ class ConnectionCW implements Runnable
         }
         catch (SQLException | IOException e)
         {
+            System.out.println(e);
         }
     }   
     
