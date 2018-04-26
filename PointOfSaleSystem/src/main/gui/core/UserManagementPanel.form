@@ -586,9 +586,11 @@
                       </Group>
                       <EmptySpace min="-2" pref="74" max="-2" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="136" max="-2" attributes="0"/>
+                  <Group type="102" attributes="0">
+                      <EmptySpace min="-2" pref="97" max="-2" attributes="0"/>
                       <Component id="search_jbutton" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                      <Component id="clear_jbutton" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
@@ -612,8 +614,11 @@
                           <Component id="employee_id_jradiobutton" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="39" max="-2" attributes="0"/>
-                      <Component id="search_jbutton" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="search_jbutton" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="clear_jbutton" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace pref="365" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -656,6 +661,14 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="search_jbuttonActionPerformed"/>
+              </Events>
+            </Component>
+            <Component class="javax.swing.JButton" name="clear_jbutton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Clear"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="clear_jbuttonActionPerformed"/>
               </Events>
             </Component>
           </SubComponents>
@@ -742,11 +755,12 @@
             <Component class="javax.swing.JTable" name="user_jtable">
               <Properties>
                 <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                  <Table columnCount="6" rowCount="0">
+                  <Table columnCount="7" rowCount="0">
                     <Column editable="false" title="Employee Id" type="java.lang.Object"/>
                     <Column editable="false" title="First Name" type="java.lang.Object"/>
                     <Column editable="false" title="Last Name" type="java.lang.Object"/>
                     <Column editable="false" title="Address" type="java.lang.Object"/>
+                    <Column editable="true" title="Ssn" type="java.lang.Object"/>
                     <Column editable="false" title="Wage" type="java.lang.Object"/>
                     <Column editable="false" title="Hours" type="java.lang.Object"/>
                   </Table>

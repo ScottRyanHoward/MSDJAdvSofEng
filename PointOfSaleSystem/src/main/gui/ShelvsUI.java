@@ -1,12 +1,16 @@
+
 package main.gui;
 
 import java.awt.CardLayout;
+import main.factory.PanelFactory;
 import main.implementation.InventoryImpl;
 import main.interfaces.InventoryInterfaceForManagers_I;
 import main.interfaces.InventoryInterface_I;
 import main.implementation.EmployeeImpl;
+import main.implementation.SalesImpl;
 import main.interfaces.Employee_I;
 import main.interfaces.Login_I;
+import main.interfaces.SalesInterface_I;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -22,10 +26,6 @@ import main.interfaces.Login_I;
 public class ShelvsUI extends javax.swing.JFrame {
 
     boolean admin_token;
-    
-    InventoryInterfaceForManagers_I inv_manager = new InventoryImpl();
-    InventoryInterface_I inv_non_manager = new InventoryImpl();
-    Employee_I employee_handler = new EmployeeImpl();
     
     /**
      * Creates new form LoginGUI
@@ -43,32 +43,21 @@ public class ShelvsUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")                      
     private void initComponents()
     {
-
+        factory = new PanelFactory(true);
         shelvsPanel = new javax.swing.JPanel();
-        launcherMenuPanel = new main.gui.core.LauncherMenuPanel();
-        if(true)
-           inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(true,inv_manager);
-        else
-          inventoryManagementPanel = new main.gui.core.InventoryManagementPanel(admin_token,inv_manager);
-                    
-        transactionsPanel = new main.gui.core.TransactionsPanel();
-        salesMetricsPanel = new main.gui.core.SalesMetricsPanel();
-        userManagementPanel = new main.gui.core.UserManagementPanel(employee_handler);
-        loginPanel = new main.gui.core.LoginPanel( (Login_I)employee_handler );
-
+        
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-
+     //   loginPanel = factory.getLoginPanel();
         shelvsPanel.setPreferredSize(new java.awt.Dimension(1878, 1038));
         shelvsPanel.setLayout(new java.awt.CardLayout());
-        shelvsPanel.add(loginPanel, "loginPanel");
-        shelvsPanel.add(launcherMenuPanel, "launcherMenuPanel");
-        shelvsPanel.add(inventoryManagementPanel, "inventoryManagementPanel");
-        shelvsPanel.add(transactionsPanel, "transactionsPanel");
-        shelvsPanel.add(salesMetricsPanel, "salesMetricsPanel");
-        shelvsPanel.add(userManagementPanel, "userManagementPanel");
+     //   shelvsPanel.add(factory.getLoginPanel(), "loginPanel");
+        shelvsPanel.add(factory.getLauncherMenuPanel(), "launcherMenuPanel");
+        shelvsPanel.add(factory.getInventoryPanel(), "inventoryManagementPanel");
+        shelvsPanel.add(factory.getTransactionsPanel(), "transactionsPanel");
+        shelvsPanel.add(factory.getSalesPanel(), "salesMetricsPanel");
+        shelvsPanel.add(factory.getUserManagementPanel(), "userManagementPanel");
  
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,7 +74,6 @@ public class ShelvsUI extends javax.swing.JFrame {
                 .addComponent(shelvsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
-
         pack();
     }                        
 
@@ -119,12 +107,8 @@ public class ShelvsUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify                     
-    private main.gui.core.InventoryManagementPanel inventoryManagementPanel;
-    private main.gui.core.LauncherMenuPanel launcherMenuPanel;
-    private main.gui.core.LoginPanel loginPanel;
-    private main.gui.core.SalesMetricsPanel salesMetricsPanel;
+    private PanelFactory factory;
     private javax.swing.JPanel shelvsPanel;
-    private main.gui.core.TransactionsPanel transactionsPanel;
-    private main.gui.core.UserManagementPanel userManagementPanel;
+  //  private main.gui.core.LoginPanel loginPanel;
     // End of variables declaration                   
 }

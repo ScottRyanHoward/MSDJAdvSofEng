@@ -6,8 +6,13 @@
 package main.gui.core;
 
 import java.awt.CardLayout;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import main.interfaces.Login_I;
 import javax.swing.JOptionPane;
+import main.structures.Login;
+import main.threadworkers.LoginWorker;
 
 /**
  *
@@ -16,13 +21,28 @@ import javax.swing.JOptionPane;
 public class LoginPanel extends javax.swing.JPanel {
 
     Login_I login_handler;
+    ObjectOutputStream oos = null;
+    ObjectInputStream ios = null;
+    private Socket socket;
+    LoginWorker worker;
+    Login login;
     
     /**
      * Creates new form LoginPanel
      */
-    public LoginPanel(Login_I login_handler) {
+    public LoginPanel(Login_I login_handler, Socket s, 
+            ObjectOutputStream new_oos , ObjectInputStream new_ios) 
+    {
         initComponents();
         this.login_handler = login_handler;
+        this.socket = s;
+        this.oos = new_oos;
+        this.ios = new_ios;
+        
+       // CardLayout card = (CardLayout)this.getParent().getLayout();
+       // card.show(this.getParent(), "launcherMenuPanel");
+                
+              
     }
 
     /**
@@ -179,18 +199,28 @@ public class LoginPanel extends javax.swing.JPanel {
         String id = userIdField.getText();
         String password = String.valueOf(passwordField.getPassword());
         
-        if(login_handler.checkLogin(id, password))
-        {
+        login_handler.checkLogin(id, password);
+        threadRecipt();
+        
+     /*   {
             CardLayout card = (CardLayout)this.getParent().getLayout();
             card.show(this.getParent(), "launcherMenuPanel");
+            //Clear so when user logs out, there isn't leftover information
+            userIdField.setText(null);
+            passwordField.setText(null);
         }
         else
         {
             JOptionPane.showMessageDialog(this, "Invalid ID and Password combination", "ERROR", JOptionPane.ERROR_MESSAGE); 
-        }
+        }*/
     }//GEN-LAST:event_loginButtonActionPerformed
 
-
+    private void threadRecipt()
+    {
+        System.out.println("THREAD RECEIPT");
+        worker = new LoginWorker(socket, ios, oos, login);
+        worker.execute();
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel authorInformationLabel;
     private javax.swing.JPanel authorInformationPanel;

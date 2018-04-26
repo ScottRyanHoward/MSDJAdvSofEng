@@ -5,6 +5,9 @@
  */
 package main.implementation;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,96 +24,46 @@ import main.structures.Sales;
 public class SalesImpl implements SalesInterface_I
 {
 
-    private Connection connection;
-    private DatabaseConnection_I db_connection;
+    ObjectOutputStream oos = null;
+    ObjectInputStream ios = null;
 
-    public SalesImpl(DatabaseConnection_I input_db_connection)
+    public SalesImpl(ObjectInputStream input_stream, ObjectOutputStream output_stream)
     {
-        db_connection = input_db_connection;
+        this.ios = input_stream;
+        this.oos = output_stream;    
     }
 
-    private void executeSqlStatement(String sql_statement)
+    private void executeSql(String query)
     {
-        try
+       try
         {
-            connection = db_connection.connectToDatabase();
-            Statement statement = connection.createStatement();
-            statement.execute(sql_statement);
+            System.out.println("QUERY = " + query);
+            oos.writeObject(query);
+            oos.flush();
         }
-        catch (SQLException e)
+        catch (IOException e)
         {
-            System.out.println("updateProduct " + e);
+            System.out.println (e);
         }
     }
 
     @Override
-    public ArrayList<Sales> getSales(String transaction)
+    public void getSales(String transaction)
     {
-        ArrayList<Sales> sales_list = new ArrayList();
-
-        try
-        {
-            connection = db_connection.connectToDatabase();
-            Statement statement = connection.createStatement();
-            String command = "SELECT * FROM sales Where transaction_id = ' "
-                    + transaction + "'";
-            ResultSet result = statement.executeQuery(command);
-
-            if (null != result)
-            {
-                while (result.next())
-                {
-                    Sales sales = new Sales();
-                    sales.setDate(result.getString("date"));
-                    sales.setPrice(Double.parseDouble(result.getString("price")));
-                    sales.setProductId(result.getString("product_id"));
-                    sales.setQuantity(Integer.parseInt(result.getString("quantity")));
-                    sales.setTransactionId(result.getString("transaction_id"));
-                }
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println("getSales " + e);
-        }
-        return sales_list;
+        String query = "SELECT * FROM transaction Where transaction_id = ' " +
+                transaction +"'";
+        executeSql(query);
     }
     
     @Override
-    public ArrayList<Sales> getAllSales()
+    public void getAllSales()
     {
-        ArrayList<Sales> sales_list = new ArrayList();
-
-        try
-        {
-            connection = db_connection.connectToDatabase();
-            Statement statement = connection.createStatement();
-            String command = "SELECT * FROM sales ";
-            ResultSet result = statement.executeQuery(command);
-
-            if (null != result)
-            {
-                while (result.next())
-                {
-                    Sales sales = new Sales();
-                    sales.setDate(result.getString("date"));
-                    sales.setPrice(Double.parseDouble(result.getString("price")));
-                    sales.setProductId(result.getString("product_id"));
-                    sales.setQuantity(Integer.parseInt(result.getString("quantity")));
-                    sales.setTransactionId(result.getString("transaction_id"));
-                }
-            }
-        }
-        catch (SQLException e)
-        {
-            System.out.println("getSales " + e);
-        }
-        return sales_list;
+        String query = "SELECT * FROM transaction ";
+        executeSql(query);
     }
 
-    public ArrayList<Sales> searchSales(String query)
+    public void searchSales(String query)
     {
-        ArrayList<Sales> sales_list = new ArrayList();
-        return sales_list;
+        executeSql(query);
     }
 }
